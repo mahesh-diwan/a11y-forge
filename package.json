@@ -1,0 +1,73 @@
+{
+  "name": "accessibility-forge",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "size": "size-limit",
+    "test:cov": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@react-spring/three": "^10.1.2",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@sentry/nextjs": "^10.66.0",
+    "mermaid": "^11.16.0",
+    "next": "16.2.10",
+    "octokit": "^5.0.5",
+    "openai": "^6.47.0",
+    "pdf-lib": "^1.17.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "three": "^0.185.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@size-limit/esbuild": "^12.1.0",
+    "@size-limit/file": "^12.1.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "playwright": "^1.61.1",
+    "size-limit": "^12.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
+  },
+  "description": "Accessibility Forge — autonomous WCAG compliance fixer with Codex + GPT-5.6",
+  "keywords": [],
+  "type": "module",
+  "size-limit": [
+    {
+      "path": [
+        "src/app/**/*.tsx",
+        "src/components/**/*.tsx"
+      ],
+      "ignore": [
+        "*.css",
+        "next",
+        "react",
+        "react-dom",
+        "three",
+        "@react-three/*",
+        "@sentry/nextjs",
+        "mermaid",
+        "pdf-lib",
+        "openai",
+        "octokit"
+      ],
+      "limit": "200 KB"
+    }
+  ]
+}

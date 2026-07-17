@@ -1,0 +1,7 @@
+{
+  "framework": "next.js",
+  "files": ["app/layout.tsx"],
+  "insertBefore": "</head>",
+  "commentSyntax": "jsx",
+  "cspChecked": true
+}

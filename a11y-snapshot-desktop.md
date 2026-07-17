@@ -1,0 +1,53 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - navigation "Primary" [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: ~
+          - generic [ref=e7]: /forge
+        - button "Open menu" [ref=e8]
+    - dialog "Navigation menu":
+      - link "Scan":
+        - /url: "#scan"
+      - link "How it works":
+        - /url: "#how-it-works"
+      - link "Dashboard":
+        - /url: "#dashboard"
+    - main [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - text: "# wcag-forge"
+          - heading "Point at a repo. Watch accessibility get forged." [level=1] [ref=e14]: Point at a repo.Watch accessibility get forged.
+          - paragraph [ref=e15]: Scans source for violations, grades the repo, shows what screen readers hear, and opens pull requests with the fixes — end to end.
+          - generic [ref=e16]:
+            - generic [ref=e17]:
+              - generic [ref=e18]: $
+              - textbox "GitHub repository URL" [ref=e19]:
+                - /placeholder: https://github.com/owner/repo
+            - button "run" [disabled] [ref=e20]
+        - generic "Live a11y forge terminal" [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e23]: accessibility-forge
+            - generic [ref=e29]:
+              - generic [ref=e30]:
+                - generic [ref=e31]: $
+                - textbox "Paste HTML markup" [ref=e32]: <img src="/hero.png" /> <button onclick="buy()">Buy</button> <input type="email" /> <html>
+              - generic [ref=e33]:
+                - generic [ref=e34]: $
+                - generic [ref=e35]: forge --fix
+              - generic [ref=e36]:
+                - generic [ref=e37]: "- <img src=\"/hero.png\" />"
+                - generic [ref=e39]: + <img src="/hero.png" / alt="descriptive image">
+                - generic [ref=e41]: "- <button onclick=\"buy()\">Buy</button>"
+                - generic [ref=e43]: + <button onclick="buy()" aria-label="action">Buy</button>
+                - generic [ref=e45]: "- <input type=\"email\" />"
+                - generic [ref=e47]: + <input type="email" / aria-label="field">
+                - generic [ref=e49]: "- <html>"
+                - generic [ref=e51]: + <html lang="en">
+              - generic [ref=e53]: 4 fixes applied
+      - generic [ref=e56]:
+        - paragraph [ref=e57]: No scan yet.
+        - paragraph [ref=e58]: Paste a public GitHub repo above to begin.
+    - contentinfo [ref=e59]: accessibility-forge // wcag 2.1 scanner & fixer
+  - button "Open Next.js Dev Tools" [ref=e66] [cursor=pointer]
+  - alert [ref=e60]
