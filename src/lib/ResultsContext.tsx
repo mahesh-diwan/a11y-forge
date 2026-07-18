@@ -85,13 +85,17 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const demo = useCallback(async () => {
-    const { DEMO_RESULT, DEMO_PRS } = await import("./demo-data");
-    setRepoUrl("github.com/mahesh-diwan/a11y-forge-demo");
-    setError(null);
-    setResult(DEMO_RESULT);
-    setPrs(DEMO_PRS);
-    setPhase("done");
-    router.push("/results");
+    try {
+      const { DEMO_RESULT, DEMO_PRS } = await import("./demo-data");
+      setRepoUrl("github.com/mahesh-diwan/a11y-forge-demo");
+      setError(null);
+      setResult(DEMO_RESULT);
+      setPrs(DEMO_PRS);
+      setPhase("done");
+      router.push("/results");
+    } catch {
+      setError("Failed to load demo data");
+    }
   }, [router]);
 
   const download = useCallback(
