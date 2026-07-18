@@ -23,6 +23,14 @@ const PHASE_LABELS: Record<Phase, string> = {
   done: "Scan",
 };
 
+const PHASE_PROGRESS: Record<Phase, number> = {
+  idle: 0,
+  scanning: 30,
+  prioritizing: 60,
+  fixing: 85,
+  done: 100,
+};
+
 export function ScanForm({
   repoUrl,
   onUrlChange,
@@ -129,11 +137,16 @@ export function ScanForm({
         </button>
       )}
       {phase !== "idle" && (
-        <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", marginTop: "8px" }}>
-          {isWorking && <span className="a11y-spinner" />}
-          {PHASE_LABELS[phase]}
-          {isWorking && <> ({elapsed}s)</>}
+        {isWorking && (
+        <p style={{ marginTop: "8px" }}>
+          <span style={{ display: "block", height: "4px", background: "var(--surface)", borderRadius: 0, overflow: "hidden", marginBottom: "6px" }}>
+            <span style={{ display: "block", height: "4px", width: `${PHASE_PROGRESS[phase]}%`, background: "var(--accent)", }} />
+          </span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)" }}>
+            {PHASE_LABELS[phase]} ({elapsed}s)
+          </span>
         </p>
+      )}
       )}
       {error && (
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--fail)", marginTop: "8px" }}>
