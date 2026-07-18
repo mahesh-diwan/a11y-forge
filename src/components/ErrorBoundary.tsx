@@ -32,12 +32,11 @@ export class ErrorBoundary extends Component<Props, State> {
         this.props.fallback ?? (
           <div role="alert" className="mx-auto max-w-md p-8 text-center">
             <h2
-              className="font-display text-2xl font-bold"
-              style={{ color: "var(--color-fail)" }}
+              style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800, color: "var(--fail)" }}
             >
               Something broke.
             </h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--color-muted)" }}>
+            <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
               {this.state.message || "An unexpected error occurred. Try again."}
             </p>
           </div>

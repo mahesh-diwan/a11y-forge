@@ -36,7 +36,7 @@ export function Mermaid({ chart }: MermaidProps) {
     mermaid.render(id, chart).then(({ svg }) => {
       el.innerHTML = svg;
     }).catch(() => {
-      el.innerHTML = `<span class="font-mono text-xs" style="color:var(--color-fail)">diagram render failed</span>`;
+      el.innerHTML = `<span class="font-mono text-xs" style="color:var(--fail)">diagram render failed</span>`;
     });
   }, [chart, key]);
 
