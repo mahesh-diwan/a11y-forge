@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildSecurityHeaders } from "./lib/security-headers";
-import { MemoryRateLimiter } from "./lib/rate-limit";
+import { sharedLimiter as limiter } from "./lib/rate-limit";
 
-const limiter = new MemoryRateLimiter();
+function nonce(): string {
+  const buf = new Uint8Array(16);
+  crypto.getRandomValues(buf);
+  return Array.from(buf, (b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 function applySecurityHeaders(res: NextResponse, env: string) {
-  const headers = buildSecurityHeaders(env);
+  const n = nonce();
+  const headers = buildSecurityHeaders(env, n);
   headers.forEach((v: string, k: string) => res.headers.set(k, v));
   return res;
 }

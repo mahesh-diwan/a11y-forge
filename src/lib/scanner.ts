@@ -1,4 +1,4 @@
-import type { Violation } from "./types";
+import type { Violation, CoverageInfo } from "./types";
 import { getOctokit, parseGithubUrl, fetchFile } from "./github";
 import { coalesce } from "./coalesce";
 import { metaFor, type FileKind, type CheckRunner } from "./violation-meta";
@@ -155,11 +155,58 @@ async function getDefaultBranchRef(octokit: ReturnType<typeof getOctokit>, owner
  * @returns Flat array of unique Violations across all scanned files.
  * @throws If repo URL is invalid or no default branch found.
  */
-export async function scanRepo(repoUrl: string, token?: string, octokit = getOctokit(token)): Promise<Violation[]> {
+/**
+ * Scope-limited check types — these use static analysis and cannot verify
+ * runtime/pixel-level behavior (e.g., actual rendered contrast, animated focus).
+ */
+const TYPE_CATEGORY: Record<string, string> = {
+  "missing-alt-text": "images",
+  "missing-aria-label": "forms",
+  "missing-form-label": "forms",
+  "missing-html-lang": "structure",
+  "low-contrast": "contrast",
+  "keyboard-trap": "keyboard",
+  "tabindex-order": "keyboard",
+  "heading-order": "structure",
+  "link-missing-text": "links",
+  "iframe-no-title": "structure",
+};
+
+function typeCategory(type: string): string {
+  return TYPE_CATEGORY[type] ?? "other";
+}
+
+const SCOPE_LIMITED_TYPES = new Set([
+  "low-contrast",
+  "keyboard-trap",
+  "focus-order",
+]);
+
+/**
+ * Compute coverage metadata from scan results and file count.
+ */
+export function computeCoverage(fileCount: number, violations: Violation[]): CoverageInfo {
+  const activeCategories = new Set(violations.map((v) => typeCategory(v.type)));
+  const scopeLimited: string[] = [];
+  const skipped: string[] = [];
+  for (const type of SCOPE_LIMITED_TYPES) {
+    if (violations.some((v) => v.type === type)) {
+      scopeLimited.push(type);
+    }
+  }
+  return {
+    fileCount,
+    categories: [...activeCategories].sort(),
+    scopeLimited: [...scopeLimited].sort(),
+    skipped,
+  };
+}
+
+export async function scanRepo(repoUrl: string, token?: string, octokit = getOctokit(token)): Promise<{ violations: Violation[]; fileCount: number }> {
   return coalesce(`scan:${repoUrl}`, () => scanRepoInner(repoUrl, token, octokit));
 }
 
-async function scanRepoInner(repoUrl: string, token?: string, octokit = getOctokit(token)): Promise<Violation[]> {
+async function scanRepoInner(repoUrl: string, token?: string, octokit = getOctokit(token)): Promise<{ violations: Violation[]; fileCount: number }> {
   const repoInfo = parseGithubUrl(repoUrl);
   if (!repoInfo) throw new Error("Invalid GitHub URL");
   const { owner, repo } = repoInfo;
@@ -196,7 +243,7 @@ async function scanRepoInner(repoUrl: string, token?: string, octokit = getOctok
     }
   }
 
-  return allViolations;
+  return { violations: allViolations, fileCount: relevantFiles.length };
 }
 
 export { metaFor };

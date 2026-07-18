@@ -40,3 +40,6 @@ export class MemoryRateLimiter implements RateLimiter {
     };
   }
 }
+
+/** Singleton shared across proxy + route handlers so X-RateLimit-Remaining header matches enforced limit */
+export const sharedLimiter = new MemoryRateLimiter(20, 60_000);

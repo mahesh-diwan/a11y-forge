@@ -40,18 +40,19 @@ describe("scanner.scanRepo", () => {
       { path: "a.html", content: "<img src=x.png>" },
       { path: "b.tsx", content: "<button onClick={fn}></button>" },
     ]);
-    const violations = await scanRepo(
+    const { violations, fileCount } = await scanRepo(
       "https://github.com/owner/repo",
       "token",
       octokit,
     );
     expect(violations.length).toBeGreaterThan(0);
     expect(violations.some((v) => v.type === "missing-alt-text")).toBe(true);
+    expect(fileCount).toBe(2);
   });
 
   it("returns empty for repo with no relevant files", async () => {
     const octokit = makeOctokit([{ path: "README.md", content: "# hi" }]);
-    const violations = await scanRepo(
+    const { violations } = await scanRepo(
       "https://github.com/owner/repo",
       "token",
       octokit,
@@ -65,7 +66,7 @@ describe("scanner.scanRepo", () => {
       content: "<img src=x.png>",
     }));
     const octokit = makeOctokit(many);
-    const violations = await scanRepo(
+    const { violations } = await scanRepo(
       "https://github.com/owner/repo",
       "token",
       octokit,
@@ -79,7 +80,7 @@ describe("scanner.scanRepo", () => {
       scanRepo("https://github.com/owner/repo", "t", octokit),
       scanRepo("https://github.com/owner/repo", "t", octokit),
     ]);
-    expect(a).toEqual(b);
+    expect(a.violations).toEqual(b.violations);
   });
 });
 

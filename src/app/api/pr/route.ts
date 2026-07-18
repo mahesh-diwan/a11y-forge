@@ -33,6 +33,23 @@ async function handle(req: NextRequest) {
     throw new ValidationError("Invalid repo URL", { category: group.category });
   }
 
+  { // Allowlist check
+    const allowlist = process.env.ALLOWLIST_REPOS;
+    if (allowlist) {
+      const patterns = allowlist.split(",").map((s) => s.trim()).filter(Boolean);
+      if (patterns.length > 0) {
+        const key = `${parsedUrl.owner}/${parsedUrl.repo}`;
+        const allowed = patterns.some((p) => {
+          if (p === "*" || p === "*/*") return true;
+          if (p === key) return true;
+          if (p.endsWith("/*") && key.startsWith(p.replace("/*", "/"))) return true;
+          return false;
+        });
+        if (!allowed) throw new ValidationError("Repo not in allowlist", { raw: parsedUrl.owner + "/" + parsedUrl.repo });
+      }
+    }
+  }
+
   const octokit = getOctokit(token);
 
   // Verify repo is accessible before proceeding
@@ -47,7 +64,9 @@ async function handle(req: NextRequest) {
   for (const v of group.violations) {
     if (!fileContents[v.file]) {
       try {
-        fileContents[v.file] = await fetchFile(octokit, parsedUrl.owner, parsedUrl.repo, v.file);
+        // Re-fetch with cache bypass (stale-cache guard)
+        // Scan may have cached older content; PR must write against latest.
+        fileContents[v.file] = await fetchFile(octokit, parsedUrl.owner, parsedUrl.repo, v.file, { bypassCache: true });
       } catch {
         // skip
       }

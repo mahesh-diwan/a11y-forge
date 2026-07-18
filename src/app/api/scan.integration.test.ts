@@ -3,9 +3,13 @@ import { POST } from "@/app/api/scan/route";
 import { NextRequest } from "next/server";
 
 vi.mock("@/lib/scanner", () => ({
-  scanRepo: vi.fn(async () => [
-    { type: "missing-alt-text", file: "a.html", line: 1, description: "no alt" },
-  ]),
+  scanRepo: vi.fn(async () => ({
+    violations: [
+      { type: "missing-alt-text", file: "a.html", line: 1, description: "no alt" },
+    ],
+    fileCount: 1,
+  })),
+  computeCoverage: vi.fn(() => ({ fileCount: 1, categories: ["images"], scopeLimited: [], skipped: [] })),
 }));
 
 describe("/api/scan integration", () => {

@@ -54,11 +54,14 @@ export async function fetchFile(
   octokit: Octokit,
   owner: string,
   repo: string,
-  path: string
+  path: string,
+  opts?: { bypassCache?: boolean }
 ): Promise<string> {
   const key = `${owner}/${repo}/${path}`;
-  const cached = cacheGet(key);
-  if (typeof cached === "string") return cached;
+  if (!opts?.bypassCache) {
+    const cached = cacheGet(key);
+    if (typeof cached === "string") return cached;
+  }
 
   const { data } = await octokit.rest.repos.getContent({ owner, repo, path });
   if ("content" in data && !Array.isArray(data)) {

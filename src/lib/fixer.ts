@@ -1,25 +1,19 @@
 import type { FixGroup } from "./types";
 import { getOpenAI } from "./openai";
+import { MODEL } from "./model";
+import { lineOf } from "./line-of";
 
 /**
  * Interface for auto-fix strategies.
- *
- * Why: Supports pluggable fixers — regex-based for simple pattern fixes,
- * GPT-based for complex fixes. Each fixer produces corrected file content
- * for a given FixGroup of violations.
- *
- * @param name - Human-readable fixer identifier (e.g. "regex", "gpt").
- * @param generate - Produces corrected file contents for violations in group.
  */
 export interface Fixer {
   readonly name: string;
   generate(files: Record<string, string>, group: FixGroup, signal?: AbortSignal): Promise<Record<string, string>>;
 }
 
-const MODEL = "gpt-5.6";
 const TIMEOUT_MS = 30_000;
 
-function addIfMissing(tag: string, attr: string): string {
+export function addIfMissing(tag: string, attr: string): string {
   return new RegExp(attr.split("=")[0] + "\\s*=", "i").test(tag)
     ? tag
     : tag.replace(/>$/, ` ${attr}>`);
@@ -37,10 +31,6 @@ const REGEX_FIXERS: Record<string, (content: string) => string> = {
 
 /**
  * Regex-based fixer for simple pattern violations.
- *
- * Why: Covers common, unambiguous violations (missing alt, aria-label, lang)
- * with predictable regex replacements. No API call needed. Used as fallback
- * when GPT fixer fails or times out.
  */
 export class RegexFixer implements Fixer {
   readonly name = "regex";
@@ -57,28 +47,140 @@ export class RegexFixer implements Fixer {
 }
 
 /**
- * AI-powered fixer using GPT for complex accessibility fixes.
+ * Known violation types — derived from CHECKS registry in scanner.ts.
+ * Used by GptFixer to validate model output never introduces unknown types.
+ */
+export const KNOWN_VIOLATION_TYPES = new Set([
+  "missing-alt-text", "missing-aria-label", "missing-form-label",
+  "missing-html-lang", "low-contrast", "keyboard-trap", "positive-tabindex",
+  "heading-structure", "vague-link-text", "iframe-no-title",
+  "empty-alt-meaningful-img", "potential-contrast-issue", "missing-aria-modal",
+  "missing-escape-handler",
+]);
+
+/**
+ * Attribute derivation by violation type.
+ */
+export function attributeForType(type: string): string | null {
+  const map: Record<string, string> = {
+    "missing-alt-text": "alt",
+    "missing-aria-label": "aria-label",
+    "missing-form-label": "aria-label",
+    "missing-html-lang": "lang",
+    "iframe-no-title": "title",
+    "positive-tabindex": "tabindex",
+  };
+  return map[type] ?? null;
+}
+
+/**
+ * Apply a single attribute addition to matching tag on target line.
+ * Handles single-line and multi-line JSX/HTML tags.
+ * Only ever adds/changes the designated attribute — never touches other content.
+ */
+export function applyEdit(content: string, line: number, attribute: string, value: string): string {
+  const lines = content.split("\n");
+  const idx = Math.min(line - 1, lines.length - 1);
+  if (idx < 0) return content;
+
+  // Multi-line tag matcher: from a '<' start token to the corresponding '>'
+  const searchFrom = Math.max(0, idx - 5);
+  const searchTo = Math.min(lines.length - 1, idx + 5);
+  const region = lines.slice(searchFrom, searchTo + 1).join("\n");
+
+  // Find opening tags (start at '<word' and end at next '>' not inside string)
+  const tagRe = /<(\w[\w.-]*)([\s\S]*?)>/g;
+  let bestMatch: { full: string; attrs: string } | null = null;
+  let bestOffset = Infinity;
+  let m: RegExpExecArray | null;
+
+  while ((m = tagRe.exec(region)) !== null) {
+    const tagLine = lineOf(region, m.index);
+    const dist = Math.abs(tagLine - (line - searchFrom));
+    if (dist < bestOffset) {
+      bestOffset = dist;
+      bestMatch = { full: m[0], attrs: m[2] };
+    }
+  }
+
+  if (!bestMatch) return content;
+
+  // If attribute already exists, skip (avoid duplication)
+  if (new RegExp(`${attribute}\\s*=`, "i").test(bestMatch.attrs)) return content;
+
+  const attrStr = `${attribute}="${value.replace(/"/g, "&quot;")}"`;
+
+  if (bestMatch.full.endsWith("/>")) {
+    // Self-closing: insert before />
+    const fixed = bestMatch.full.slice(0, -2) + ` ${attrStr} />`;
+    const regionFixed = region.replace(bestMatch.full, fixed);
+    return lines.slice(0, searchFrom).join("\n") + "\n" + regionFixed + "\n" + lines.slice(searchTo + 1).join("\n");
+  }
+
+  // Opening tag: insert before the closing >
+  const fixed = bestMatch.full.slice(0, -1) + ` ${attrStr}>`;
+  const regionFixed = region.replace(bestMatch.full, fixed);
+  const before = lines.slice(0, searchFrom).join("\n");
+  const after = lines.slice(searchTo + 1).join("\n");
+  const parts = [before, regionFixed, after].filter(Boolean);
+  return parts.join("\n");
+}
+
+/** Max edits per file per fix group */
+const MAX_EDITS_PER_FILE = 5;
+/** Max total edits per group */
+const MAX_EDITS_TOTAL = 20;
+
+interface StructuredEdit {
+  file: string;
+  line: number;
+  attribute: string;
+  action: "add" | "replace";
+  value: string;
+}
+
+/**
+ * AI-powered fixer using GPT — returns structured edits only, never full file bodies.
  *
- * Why: Handles violations requiring understanding of context — e.g. generating
- * meaningful alt text from image src, or restructuring headings. Falls back
- * to RegexFixer if GPT call fails or returns empty. Uses JSON response format
- * for reliable parsing. Respects AbortSignal for cancellation.
+ * Security model:
+ * - Model outputs targeted edits { file, line, attribute, action, value }
+ * - Every edit is validated against KNOWN_VIOLATION_TYPES
+ * - Attribute is derived from violation type, never trusted from model
+ * - Edits are capped (5 per file, 20 per group)
+ * - Uses addIfMissing/attribute-only insertion — never replaces full file
+ * - Falls back to RegexFixer if validation/cap fails
  */
 export class GptFixer implements Fixer {
   readonly name = "gpt";
-  async generate(files: Record<string, string>, group: FixGroup, signal?: AbortSignal): Promise<Record<string, string>> {
-    const openai = await getOpenAI();
-    const prompt = `You are an accessibility fixer. Generate corrected code for these WCAG violations.
+  private getOpenAi: () => ReturnType<typeof getOpenAI>;
 
-For each file, output the FULL corrected file content. Keep the original code but apply the fixes.
+  constructor(getOpenAi?: () => ReturnType<typeof getOpenAI>) {
+    this.getOpenAi = getOpenAi ?? getOpenAI;
+  }
+
+  async generate(files: Record<string, string>, group: FixGroup, signal?: AbortSignal): Promise<Record<string, string>> {
+    const openai = await this.getOpenAi();
+
+    const violationTypeKeys = [...new Set(group.violations.map((v) => v.type))];
+    const validTypes = violationTypeKeys.filter((t) => KNOWN_VIOLATION_TYPES.has(t));
+    if (validTypes.length === 0) return {};
+
+    const allowedAttrs = [...new Set(validTypes.map((t) => attributeForType(t)).filter(Boolean))];
+
+    const prompt = `You are an accessibility fixer. Generate targeted attribute edits to fix WCAG violations.
+
+For each violation, output a single edit adding or replacing an accessibility attribute on the HTML/JSX element at the given line.
+
+RULES:
+- Only output edits for these attribute types: ${allowedAttrs.join(", ")}
+- Each edit targets ONE attribute on ONE element — never full file content
+- The line number approximately locates the element; nearby element is fine
+- Generate descriptive, context-appropriate values for alt text, aria-label, etc. based on filenames and surrounding context
 
 Violations:
 ${JSON.stringify(group.violations, null, 2)}
 
-Current file contents:
-${JSON.stringify(files, null, 2)}
-
-Respond with JSON: { "files": { "path/to/file.tsx": "corrected content", ... } }`;
+Respond JSON: { "edits": [{ "file": "path/to/file.tsx", "line": 42, "attribute": "alt", "action": "add", "value": "description of image" }] }`;
 
     const response = await openai.chat.completions.create({
       model: MODEL,
@@ -89,19 +191,64 @@ Respond with JSON: { "files": { "path/to/file.tsx": "corrected content", ... } }
     const content = response.choices[0]?.message?.content;
     if (!content) return {};
     const parsed: unknown = JSON.parse(content);
-    if (parsed && typeof parsed === "object" && "files" in parsed && typeof (parsed as Record<string, unknown>).files === "object") {
-      return (parsed as Record<string, unknown>).files as Record<string, string>;
+    if (!parsed || typeof parsed !== "object") return {};
+    const raw = (parsed as Record<string, unknown>).edits;
+    if (!Array.isArray(raw)) return {};
+
+    const filesInGroup = new Set(group.violations.map((v) => v.file));
+    const violationTypesByFile = new Map<string, Set<string>>();
+    for (const v of group.violations) {
+      if (!violationTypesByFile.has(v.file)) violationTypesByFile.set(v.file, new Set());
+      violationTypesByFile.get(v.file)!.add(v.type);
     }
-    return {};
+
+    // Validate every edit against known types and group scope
+    const edits: StructuredEdit[] = [];
+    const editCountByFile = new Map<string, number>();
+
+    for (const e of raw) {
+      if (typeof e !== "object" || e === null) continue;
+      const f = String((e as any).file ?? "");
+      const line = Number((e as any).line ?? 0);
+      const attr = String((e as any).attribute ?? "").toLowerCase();
+      const action = String((e as any).action ?? "");
+      const value = String((e as any).value ?? "");
+
+      if (!filesInGroup.has(f)) continue;
+      if (!Number.isInteger(line) || line < 1) continue;
+      if (action !== "add" && action !== "replace") continue;
+      if (value.length > 500) continue;
+
+      // Derive expected attribute from violation types on this file
+      const fileTypes = violationTypesByFile.get(f);
+      if (!fileTypes) continue;
+      const expectedAttr = [...fileTypes].map((t) => attributeForType(t)).find((a) => a === attr);
+      if (!expectedAttr) continue;
+
+      const count = (editCountByFile.get(f) ?? 0) + 1;
+      editCountByFile.set(f, count);
+      if (count > MAX_EDITS_PER_FILE) continue;
+
+      edits.push({ file: f, line, attribute: expectedAttr, action: action as "add" | "replace", value });
+      if (edits.length >= MAX_EDITS_TOTAL) break;
+    }
+
+    if (edits.length === 0) return {};
+
+    // Apply edits to file contents
+    const out: Record<string, string> = {};
+    for (const edit of edits) {
+      if (!out[edit.file]) out[edit.file] = files[edit.file] ?? "";
+      if (!out[edit.file]) continue;
+      out[edit.file] = applyEdit(out[edit.file], edit.line, edit.attribute, edit.value);
+    }
+
+    return out;
   }
 }
 
 /**
  * Composable fallback fixer — tries primary, falls back to secondary on failure.
- *
- * Why: Encapsulates try-primary-then-fallback pattern as a Fixer.
- * usedFallback flag lets callers know whether primary or fallback was used.
- * Enable testing fallback logic independently with fake fixers.
  */
 export class FallbackFixer implements Fixer {
   readonly name = "fallback";
@@ -120,14 +267,6 @@ export class FallbackFixer implements Fixer {
 
 /**
  * Generate auto-fixes for a group of violations.
- *
- * Why: Uses FallbackFixer to compose GPT (primary) + regex (fallback).
- * Returns usedFallback flag so callers can log or adjust explanation.
- *
- * @param files - Original file contents keyed by file path.
- * @param group - Violation group to fix.
- * @param signal - Optional AbortSignal to cancel GPT request.
- * @returns Corrected file contents and whether regex fallback was used.
  */
 export async function generateFixes(
   files: Record<string, string>,

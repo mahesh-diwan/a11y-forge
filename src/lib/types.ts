@@ -11,8 +11,19 @@ export interface Violation {
 }
 
 /**
+ * Describes which check categories were applied and which were scope-limited.
+ * Static-only checks (like contrast) are documented here as caveats.
+ */
+export interface CoverageInfo {
+  fileCount: number;
+  categories: string[];
+  scopeLimited: string[];
+  skipped: string[];
+}
+
+/**
  * Top-level scan output for a single repository.
- * Contains violations list plus optional score, screen reader analysis, and confidence data.
+ * Contains violations list plus optional score, screen reader analysis, confidence data, and coverage info.
  */
 export interface ScanResult {
   repoUrl: string;
@@ -20,6 +31,7 @@ export interface ScanResult {
   score?: ScoreResult;
   screenReader?: ScreenReaderOutput[];
   confidence?: ConfidenceResult[];
+  coverage?: CoverageInfo;
 }
 
 /**

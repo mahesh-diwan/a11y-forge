@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { scanRepo } from "@/lib/scanner";
+import { scanRepo, computeCoverage } from "@/lib/scanner";
 import { calculateScore } from "@/lib/score";
 import { generateScreenReaderPreview } from "@/lib/screen-reader";
 import { scoreConfidence } from "@/lib/confidence";
@@ -20,10 +20,11 @@ async function handle(req: NextRequest) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) throw new ConfigError("GITHUB_TOKEN not configured");
 
-  const violations = await scanRepo(repoUrl, token);
+  const { violations, fileCount } = await scanRepo(repoUrl, token);
   const score = calculateScore(violations);
   const screenReader = generateScreenReaderPreview(violations);
   const confidence = scoreConfidence(violations);
+  const coverage = computeCoverage(fileCount, violations);
 
   return NextResponse.json({
     repoUrl,
@@ -31,6 +32,7 @@ async function handle(req: NextRequest) {
     score,
     screenReader,
     confidence,
+    coverage,
   });
 }
 

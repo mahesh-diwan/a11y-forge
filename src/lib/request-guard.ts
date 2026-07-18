@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MemoryRateLimiter } from "./rate-limit";
+import { sharedLimiter as limiter } from "./rate-limit";
 
 const MAX_BODY_BYTES = 500_000;
 const MAX_PAYLOAD_BYTES = 2_000_000;
-
-const limiter = new MemoryRateLimiter();
 
 export function guard(req: NextRequest): NextResponse | null {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
