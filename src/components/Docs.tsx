@@ -50,7 +50,7 @@ export function Docs() {
         Quick Start
       </h2>
       <div style={{ border: "1px solid var(--border)", padding: "16px", marginBottom: "24px" }}>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8 }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, overflowX: "auto" }}>
 {`git clone https://github.com/yourusername/a11y-forge
 cd a11y-forge
 cp .env.local.example .env.local
@@ -147,7 +147,7 @@ curl https://a11y-forge.vercel.app/api/badge`}
         Setup
       </h2>
       <div style={{ border: "1px solid var(--border)", padding: "16px" }}>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8 }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, overflowX: "auto" }}>
 {`GITHUB_TOKEN=ghp_...     # required, repo scope
 OPENAI_API_KEY=sk-...    # optional, enables AI grouping
 
