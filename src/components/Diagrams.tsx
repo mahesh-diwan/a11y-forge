@@ -18,17 +18,13 @@ function Arrow() {
 
 export function PipelineDiagram() {
   return (
-    <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px", justifyContent: "center", padding: "8px 0" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "4px 0" }}>
       {STEPS.map((s, i) => (
         <div key={s.label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div
-            style={{
-              border: "1px solid var(--accent)",
-              padding: "8px 14px",
-              textAlign: "center",
-              minWidth: "80px",
-            }}
-          >
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", fontWeight: 700, flexShrink: 0, width: "16px", textAlign: "right" }}>
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <div style={{ flex: 1, border: "1px solid var(--accent)", padding: "8px 14px", minWidth: 0 }}>
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text)", fontWeight: 600, display: "block" }}>
               {s.label}
             </span>
@@ -38,7 +34,6 @@ export function PipelineDiagram() {
               </span>
             )}
           </div>
-          {i < STEPS.length - 1 && <Arrow />}
         </div>
       ))}
     </div>
@@ -80,30 +75,33 @@ export function SequenceDiagram() {
   return (
     <div style={{ fontFamily: "var(--font-mono)", fontSize: "10px", overflowX: "auto" }}>
       {participants.map((p, pi) => (
-        <div key={p} style={{ display: "flex", gap: "8px", alignItems: "flex-start", marginBottom: "12px" }}>
+        <div key={p} style={{ display: "flex", gap: "6px", alignItems: "flex-start", marginBottom: "10px" }}>
           <div
             style={{
               flexShrink: 0,
-              width: "140px",
-              padding: "4px 8px",
+              width: "auto",
+              minWidth: "fit-content",
+              maxWidth: "40%",
+              padding: "4px 6px",
               border: "1px solid var(--border)",
               color: COLORS[pi % 3],
               fontWeight: 600,
-              textAlign: "right",
+              fontSize: "9px",
+              wordBreak: "break-word",
             }}
           >
             {p}
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
             {SEQ.filter((r) => r.from === p).map((r, ri) => (
-              <div key={ri} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "2px 0" }}>
-                <span style={{ color: "var(--muted)", fontSize: "9px", flexShrink: 0, width: "20px", textAlign: "center" }}>
-                  {r.selfLoop ? "↻" : "→"}
+              <div key={ri} style={{ display: "flex", alignItems: "flex-start", gap: "4px", padding: "2px 0" }}>
+                <span style={{ color: "var(--muted)", fontSize: "9px", flexShrink: 0, width: "14px", textAlign: "center", lineHeight: "14px" }}>
+                  {r.selfLoop ? "\u21bb" : "\u2192"}
                 </span>
-                <span style={{ color: "var(--accent)", flexShrink: 0, minWidth: "30px" }}>
+                <span style={{ color: "var(--accent)", flexShrink: 0, fontSize: "9px", wordBreak: "break-word", maxWidth: "35%" }}>
                   {r.to === r.from ? "" : r.to}
                 </span>
-                <span style={{ color: "var(--muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ color: "var(--muted)", fontSize: "9px", wordBreak: "break-word", lineHeight: "14px" }}>
                   {r.label}
                 </span>
               </div>

@@ -160,8 +160,8 @@ npm test`}
       <h2 style={{ fontFamily: "var(--font-mono)", fontSize: "13px", fontWeight: 600, color: "var(--accent)", margin: "0 0 12px 0" }}>
         Limitations
       </h2>
-      <div style={{ border: "1px solid var(--border)", padding: "16px" }}>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8 }}>
+      <div style={{ border: "1px solid var(--border)", padding: "16px", overflowX: "auto" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
 {`\u2022 File limit: 150 files per scan
 \u2022 Rate limit: 20 req/min per IP
 \u2022 Body limit: 500KB
