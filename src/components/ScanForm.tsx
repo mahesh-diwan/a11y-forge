@@ -1,14 +1,14 @@
-import type { FormEvent } from "react";
-import { Button } from "@/components/ui/Button";
+"use client";
+import { type FormEvent, type RefObject } from "react";
 
 interface ScanFormProps {
   repoUrl: string;
-  onUrlChange: (url: string) => void;
+  onUrlChange: (v: string) => void;
   onSubmit: (e: FormEvent) => void;
   onCancel: () => void;
-  phase: "idle" | "scanning" | "prioritizing" | "fixing" | "done";
+  phase: string;
   error: string | null;
-  inputRef?: React.RefObject<HTMLInputElement | null>;
+  inputRef?: RefObject<HTMLInputElement | null>;
 }
 
 export function ScanForm({
@@ -17,33 +17,51 @@ export function ScanForm({
   onSubmit,
   onCancel,
   phase,
+  error,
   inputRef,
 }: ScanFormProps) {
   return (
-    <form onSubmit={onSubmit} className="flex max-w-xl flex-col gap-3 sm:flex-row">
-      <div className="flex flex-1 items-center rounded-full border border-[var(--color-border)] bg-black/20 font-mono text-sm transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)] focus-within:border-[var(--color-focus)]">
-        <span className="shrink-0 pl-3 text-xs" style={{ color: "var(--color-pass)" }} aria-hidden="true">$</span>
+    <form onSubmit={onSubmit} className="flex items-center gap-2">
+      <div className="relative flex-1">
         <input
           ref={inputRef}
           type="text"
           value={repoUrl}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="https://github.com/owner/repo"
-          aria-label="GitHub repository URL"
-          className="w-full bg-transparent px-2 py-3 text-sm outline-none placeholder:text-[var(--color-muted)]"
-          disabled={phase !== "idle"}
+          aria-label="GitHub repo URL"
+          className="w-full rounded-lg border bg-transparent px-3 py-2 font-mono text-sm outline-none transition"
+          style={{
+            borderColor: "var(--color-border)",
+            color: "var(--color-text)",
+          }}
         />
       </div>
-      <p className="mt-2 text-xs leading-relaxed" style={{ color: "var(--color-muted)" }}>
-        Paste your project's GitHub repository link — not your live website URL.
-      </p>
-      <Button type="submit" loading={phase !== "idle"} loadingLabel="Running…" disabled={phase !== "idle" || !repoUrl}>
-        run
-      </Button>
-      {phase !== "idle" && (
-        <Button type="button" variant="secondary" onClick={onCancel}>
-          cancel
-        </Button>
+      {phase === "idle" ? (
+        <button
+          type="submit"
+          className="rounded-lg px-4 py-2 font-mono text-sm font-bold transition active:scale-[0.97]"
+          style={{ background: "var(--color-pass)", color: "#000" }}
+        >
+          Scan
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded-lg border px-4 py-2 font-mono text-sm transition"
+          style={{
+            borderColor: "var(--color-fail)",
+            color: "var(--color-fail)",
+          }}
+        >
+          Cancel
+        </button>
+      )}
+      {error && (
+        <p className="text-xs" style={{ color: "var(--color-fail)" }}>
+          {error}
+        </p>
       )}
     </form>
   );

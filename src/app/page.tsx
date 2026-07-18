@@ -3,16 +3,16 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
 import type { ScanResult, FixPR } from "@/lib/types";
 import { ErrorBanner, ActivityLog, ScanSkeleton } from "@/components/states";
-import { Stepper, type StepState } from "@/components/ui/Stepper";
+import { Stepper } from "@/components/ui/Stepper";
+import type { StepState } from "@/components/ui/Stepper";
 import { Nav } from "@/components/Nav";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ForgeHero } from "@/components/ForgeHero";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { DocsPage } from "@/components/DocsPage";
 import { Dashboard } from "@/components/Dashboard";
 import { ScanForm } from "@/components/ScanForm";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { useReveal } from "@/lib/useReveal";
+import { FilterBar } from "@/components/FilterBar";
 import { useKeyboard } from "@/lib/useKeyboard";
 import { runWorkflow } from "@/lib/workflow";
 
@@ -29,12 +29,10 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState("forge");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [filterTag, setFilterTag] = useState("all");
   const abortRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const downloadLock = useRef<Set<string>>(new Set());
-
-  const { ref: heroRef, visible: heroVisible } = useReveal<HTMLDivElement>();
-  const { ref: resultsRef, visible: resultsVisible } = useReveal<HTMLDivElement>();
 
   useKeyboard({
     s: () => { if (phase === "idle") inputRef.current?.focus(); },
@@ -136,68 +134,65 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-[100dvh]" style={{ background: "var(--color-ink)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
+    <div className="min-h-[100dvh]" style={{ background: "var(--color-canvas)", color: "var(--color-text)", fontFamily: "var(--font-body)" }}>
       <Nav activeView={activeView} onViewChange={setActiveView} />
 
-      <main id="main-content" className="relative z-10 mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
-        <ErrorBoundary>
+      <main id="main-content" className="relative z-10 mx-auto max-w-5xl px-4 py-16 sm:px-6">
         {activeView === "forge" && (
-          <section
-            ref={heroRef}
-            className={`reveal ${heroVisible ? "is-visible" : ""} relative pb-24 pt-16`}
-            id="forge"
-          >
-            <div className="mx-auto max-w-3xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--color-amber)" }}>
-                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: "var(--color-amber)", boxShadow: "0 0 8px var(--color-amber)" }} />
-                automated accessibility from commit to PR
+          <section id="forge">
+            <h1
+              className="font-display text-3xl font-bold leading-tight sm:text-4xl"
+              style={{ textWrap: "balance" }}
+            >
+              Paste a repo.{" "}
+              <span style={{ color: "var(--color-pass)" }}>
+                equity ships the fixes.
               </span>
-              <h1 className="mt-5 font-display text-5xl font-bold leading-[1.02] sm:text-6xl lg:text-7xl" style={{ textWrap: "balance" }}>
-                Paste a repo.
-                <br />
-                <span style={{ color: "var(--color-amber)" }}>equity ships the fixes.</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed" style={{ color: "var(--color-muted)" }}>
-                equity checks every file for missing alt text, unclear labels, low contrast,
-                and keyboard traps — then opens pull requests with the fixes, ready for you to review and approve.
-              </p>
+            </h1>
+            <p
+              className="mt-2 max-w-lg text-sm"
+              style={{ color: "var(--color-muted)" }}
+            >
+              equity checks every file for WCAG violations and opens pull
+              requests with fixes.
+            </p>
+            <div className="mt-4">
+              <ScanForm
+                repoUrl={repoUrl}
+                onUrlChange={setRepoUrl}
+                onSubmit={handleScan}
+                onCancel={handleCancel}
+                phase={phase}
+                error={error}
+                inputRef={inputRef}
+              />
             </div>
-
-            <div className="mt-10 flex flex-col gap-8">
-              <div className="mx-auto w-full max-w-xl">
-                <ScanForm
-                  repoUrl={repoUrl}
-                  onUrlChange={setRepoUrl}
-                  onSubmit={handleScan}
-                  onCancel={handleCancel}
-                  phase={phase}
-                  error={error}
-                  inputRef={inputRef}
-                />
-                <p className="mt-3 text-center font-mono text-[11px]" style={{ color: "var(--color-muted)" }}>
-                  Works with public GitHub repos. Paste a link, equity does the rest.
-                </p>
+            {phase !== "idle" && phase !== "done" && (
+              <div className="my-4">
+                <Stepper steps={steps} />
               </div>
-
-              <div className="w-full">
-                <ForgeHero />
-              </div>
-            </div>
+            )}
+            <ForgeHero />
+            {result && (
+              <FilterBar active={filterTag} onChange={setFilterTag} />
+            )}
+            <Dashboard
+              result={result}
+              phase={phase}
+              prs={prs}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              download={download}
+            />
+            <ActivityLog log={log} />
           </section>
         )}
-
         {activeView === "guide" && <HowItWorksSection />}
-
         {activeView === "docs" && <DocsPage />}
-
         {activeView === "dashboard" && (
-          <section
-            ref={resultsRef}
-            id="results-section"
-            className={`reveal ${resultsVisible ? "is-visible" : ""} mt-16 scroll-mt-24`}
-          >
+          <section id="results-section" className="mt-16 scroll-mt-24">
             {phase !== "idle" && phase !== "done" && (
-              <div className="mb-8" key={`stepper-${phase}`}>
+              <div className="mb-8">
                 <Stepper steps={steps} />
               </div>
             )}
@@ -213,8 +208,6 @@ export default function Home() {
           </section>
         )}
 
-        <ActivityLog log={log} />
-
         <ConfirmDialog
           repoUrl={repoUrl}
           groupCount={prs.length || 0}
@@ -224,12 +217,7 @@ export default function Home() {
         />
 
         {error && <ErrorBanner message={error} />}
-        </ErrorBoundary>
       </main>
-
-      <footer className="relative z-10 border-t border-[var(--color-border)] py-6 text-center font-mono text-[10px]" style={{ color: "var(--color-muted)" }}>
-        equity // automated a11y from commit to pr
-      </footer>
     </div>
   );
 }

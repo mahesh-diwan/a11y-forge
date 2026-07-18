@@ -56,7 +56,7 @@ export function HowItWorksSection() {
             groups them by type, writes the fixes, and sends them back as ready-to-merge updates.
             No accessibility expertise required to start — every fix is a reviewable pull request.
           </p>
-          <p className="mt-2 max-w-2xl font-mono text-[11px]" style={{ color: "var(--color-amber)" }}>
+          <p className="mt-2 max-w-2xl font-mono text-[11px]" style={{ color: "var(--color-pass)" }}>
             Scans HTML/JSX source for common WCAG issues. Not a substitute for manual screen-reader testing.
           </p>
 

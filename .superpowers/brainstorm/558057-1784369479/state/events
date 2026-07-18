@@ -1,0 +1,3 @@
+{"type":"click","text":"P\n    Floating pill (current)Keep existing top-6 pill. Familiar but less catalog feel.","choice":"pill","id":null,"timestamp":1784369692569}
+{"type":"click","text":"M\n    Mini heroSmall terminal + input in top section. ~200px. H1 above in Syne. Grid below.","choice":"mini","id":null,"timestamp":1784369704665}
+{"type":"click","text":"T\n    Tightp-4, title + severity dot + snippet. More scannable, denser grid.","choice":"tight","id":null,"timestamp":1784369717404}

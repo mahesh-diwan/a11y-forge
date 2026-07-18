@@ -1,36 +1,43 @@
-import type { Violation, ConfidenceResult } from "@/lib/types";
-import { Badge } from "@/components/ui/Badge";
-import { metaFor } from "@/lib/violation-meta";
+import type { Violation } from "@/lib/types";
+import { Card } from "./Card";
 
-export function ViolationCard({ v, conf }: { v: Violation; conf?: ConfidenceResult }) {
-  const m = metaFor(v.type);
-  const confClass = conf
-    ? conf.confidence >= 90 ? "v-badge-pass" : conf.confidence >= 70 ? "v-badge-warn" : "v-badge-fail"
-    : "";
+interface ViolationCardProps {
+  v: Violation;
+}
+
+export function ViolationCard({ v }: ViolationCardProps) {
   return (
-    <div className="bezel" style={{ borderColor: "var(--color-border)" }}>
-      <div className="bezel-core p-4">
-        <div className="flex items-start justify-between mb-1 gap-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge severity={m.severity}>{m.displayName}</Badge>
-            {conf && (
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono border border-[var(--color-border)] ${confClass}`}>
-                {conf.confidence}% confident
-              </span>
-            )}
+    <Card>
+      <div className="flex items-start gap-2">
+        <span
+          className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full"
+          style={{ background: "var(--color-fail)" }}
+        />
+        <div className="min-w-0 flex-1">
+          <div
+            className="flex items-center gap-2 font-mono text-[10px]"
+            style={{ color: "var(--color-muted)" }}
+          >
+            <span>
+              {v.file}:{v.line}
+            </span>
           </div>
-          <span className="text-xs font-mono shrink-0" style={{ color: "var(--color-muted)" }}>{v.file}:{v.line}</span>
+          <p
+            className="mt-1 text-sm font-semibold"
+            style={{ color: "var(--color-text)" }}
+          >
+            {v.description}
+          </p>
+          {v.snippet && (
+            <pre
+              className="mt-1 overflow-x-auto rounded bg-[var(--color-ink)] p-2 font-mono text-[10px]"
+              style={{ color: "var(--color-muted)" }}
+            >
+              {v.snippet}
+            </pre>
+          )}
         </div>
-        <p className="text-xs" style={{ color: "var(--color-muted)" }}>{v.description}</p>
-        {conf?.reasoning && (
-          <p className="text-[11px] mt-1 italic" style={{ color: "var(--color-muted)" }}>{conf.reasoning}</p>
-        )}
-        {v.snippet && (
-          <pre className="mt-2 rounded border border-[var(--color-border)] bg-[var(--color-ink)] p-3 text-xs font-mono overflow-x-auto" style={{ color: "var(--color-text)" }}>
-            {v.snippet}
-          </pre>
-        )}
       </div>
-    </div>
+    </Card>
   );
 }

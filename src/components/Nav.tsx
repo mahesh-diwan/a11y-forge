@@ -31,7 +31,7 @@ export function Nav({ activeView, onViewChange }: NavProps) {
       <header className={cn("fixed left-1/2 top-6 z-40 w-full max-w-[520px] -translate-x-1/2 px-4 transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none", mounted ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0")}>
         <nav
           className="mx-auto flex w-max items-center gap-3 rounded-full border border-[var(--color-border)] px-2 py-1.5 transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]"
-          style={{ background: "var(--color-surface-solid)" }}
+          style={{ background: "var(--color-surface)" }}
           role="navigation"
           aria-label="Primary"
         >

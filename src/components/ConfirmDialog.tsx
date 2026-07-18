@@ -85,8 +85,8 @@ export function ConfirmDialog({
 
       {/* Panel */}
       <div
-        className={cn(
-          "relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-solid)] p-6 shadow-lg transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          className={cn(
+            "relative z-10 w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-lg transition-all duration-250 ease-[cubic-bezier(0.32,0.72,0,1)]",
           open
             ? "opacity-100 scale-100 visible pointer-events-auto"
             : "opacity-0 scale-95 invisible pointer-events-none"
