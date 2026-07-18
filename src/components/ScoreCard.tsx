@@ -1,5 +1,6 @@
+"use client";
+
 import type { ScoreResult } from "@/lib/types";
-import { Card } from "./Card";
 
 interface ScoreCardProps {
   score: ScoreResult;
@@ -7,40 +8,58 @@ interface ScoreCardProps {
 }
 
 export function ScoreCard({ score, download }: ScoreCardProps) {
+  const isPass = score.score >= 70;
+  const gradeColor = isPass ? "var(--accent)" : "var(--fail)";
+
   return (
-    <Card className="mb-4 flex items-center gap-4" hover={false}>
-      <div
-        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-bold font-display"
-        style={{
-          border: "2px solid var(--color-pass)",
-          color: "var(--color-pass)",
-        }}
-      >
-        {score.grade}
-      </div>
-      <div className="flex-1">
-        <p
-          className="text-sm font-semibold"
-          style={{ color: "var(--color-text)" }}
+    <div style={{ border: "1px solid var(--border)", padding: "20px", marginBottom: "16px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+        <div
+          style={{
+            width: "72px",
+            height: "72px",
+            borderRadius: "50%",
+            border: `2px solid ${gradeColor}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "var(--font-mono)",
+            fontSize: "24px",
+            fontWeight: 700,
+            color: gradeColor,
+            flexShrink: 0,
+          }}
         >
-          Score: {score.score}/100
-        </p>
+          {score.grade}
+        </div>
+        <div>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "28px", fontWeight: 700, margin: 0, color: gradeColor }}>
+            {score.score}/100
+          </p>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "4px 0 0 0" }}>
+            {score.totalViolations} violations · {score.affectedFiles.length} files
+          </p>
+        </div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: "4px", flexWrap: "wrap" }}>
+          {(["report", "badge", "pdf"] as const).map((k) => (
+            <button
+              key={k}
+              onClick={() => download(k)}
+              style={{
+                padding: "6px 12px",
+                background: "transparent",
+                border: "1px solid var(--border)",
+                color: "var(--accent)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "10px",
+                cursor: "pointer",
+              }}
+            >
+              {k === "report" ? "HTML Report" : k === "badge" ? "Badge SVG" : "PDF Report"}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="flex gap-2">
-        {(["report", "badge", "pdf"] as const).map((k) => (
-          <button
-            key={k}
-            onClick={() => download(k)}
-            className="rounded px-3 py-1 font-mono text-[10px] uppercase tracking-wider transition hover:brightness-125"
-            style={{
-              background: "var(--color-pass-bg)",
-              color: "var(--color-pass)",
-            }}
-          >
-            {k}
-          </button>
-        ))}
-      </div>
-    </Card>
+    </div>
   );
 }

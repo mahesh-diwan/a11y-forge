@@ -1,43 +1,46 @@
+"use client";
+
 import type { Violation } from "@/lib/types";
-import { Card } from "./Card";
+
+const SEVERITY_COLORS: Record<string, string> = {
+  critical: "var(--fail)",
+  serious: "var(--fail)",
+  moderate: "var(--accent)",
+  minor: "var(--muted)",
+};
 
 interface ViolationCardProps {
   v: Violation;
 }
 
 export function ViolationCard({ v }: ViolationCardProps) {
+  const dotColor = SEVERITY_COLORS[v.type] || "var(--accent)";
+
   return (
-    <Card>
-      <div className="flex items-start gap-2">
-        <span
-          className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full"
-          style={{ background: "var(--color-fail)" }}
-        />
-        <div className="min-w-0 flex-1">
-          <div
-            className="flex items-center gap-2 font-mono text-[10px]"
-            style={{ color: "var(--color-muted)" }}
-          >
-            <span>
-              {v.file}:{v.line}
-            </span>
-          </div>
-          <p
-            className="mt-1 text-sm font-semibold"
-            style={{ color: "var(--color-text)" }}
-          >
-            {v.description}
-          </p>
-          {v.snippet && (
-            <pre
-              className="mt-1 overflow-x-auto rounded bg-[var(--color-ink)] p-2 font-mono text-[10px]"
-              style={{ color: "var(--color-muted)" }}
-            >
-              {v.snippet}
-            </pre>
-          )}
-        </div>
+    <div style={{ border: "1px solid var(--border)", padding: "12px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: dotColor, flexShrink: 0, display: "inline-block" }} />
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)" }}>
+          {v.file}:{v.line}
+        </span>
       </div>
-    </Card>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: "12px", color: "var(--text)", margin: "0 0 8px 0" }}>
+        {v.description}
+      </p>
+      {v.snippet && (
+        <pre style={{
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          padding: "8px",
+          fontFamily: "var(--font-mono)",
+          fontSize: "10px",
+          color: "var(--muted)",
+          overflow: "auto",
+          margin: 0,
+        }}>
+          {v.snippet}
+        </pre>
+      )}
+    </div>
   );
 }
