@@ -74,7 +74,7 @@ const SCANNERS = [
 
 export function Docs() {
   return (
-    <section id="docs" style={{ padding: "48px 0", borderTop: "1px solid var(--border)" }}>
+    <section style={{ padding: "48px 0", borderTop: "1px solid var(--border)" }}>
       <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 800, margin: "0 0 4px 0" }}>
         DOCS
       </h2>
