@@ -12,6 +12,7 @@ export function proxy(req: NextRequest) {
   const headers = buildSecurityHeaders(process.env.NODE_ENV ?? "development", n);
   const res = NextResponse.next();
   headers.forEach((v: string, k: string) => res.headers.set(k, v));
+  res.headers.set("x-nonce", n);
   return res;
 }
 
