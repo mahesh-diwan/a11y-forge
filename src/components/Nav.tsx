@@ -1,19 +1,18 @@
 "use client";
 
-interface NavProps {
-  activeView: string;
-  onViewChange: (view: string) => void;
-}
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useResults } from "@/lib/ResultsContext";
 
-const LINKS = ["Scan", "Results", "Guide", "Docs"];
+export function Nav() {
+  const pathname = usePathname();
+  const { result } = useResults();
 
-export function Nav({ activeView, onViewChange }: NavProps) {
-  function handleClick(label: string) {
-    const id = label.toLowerCase();
-    onViewChange(id);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "instant" });
-  }
+  const links = [
+    { label: "Home", href: "/" },
+    { label: "Results", href: "/results", disabled: !result },
+    { label: "Docs", href: "/docs" },
+  ];
 
   return (
     <header
@@ -40,29 +39,81 @@ export function Nav({ activeView, onViewChange }: NavProps) {
         role="navigation"
         aria-label="Primary"
       >
-        <span style={{ color: "var(--accent)", fontWeight: 700, marginRight: "12px" }}>af</span>
-        <div style={{ width: "1px", height: "14px", background: "var(--border)", marginRight: "12px" }} />
-        <ul style={{ display: "flex", gap: "4px", listStyle: "none", margin: 0, padding: 0, alignItems: "center" }}>
-          {LINKS.map((l) => (
-            <li key={l}>
-              <a
-                href={`#${l.toLowerCase()}`}
-                onClick={(e) => { e.preventDefault(); handleClick(l); }}
-                style={{
-                  padding: "4px 10px",
-                  color: activeView === l.toLowerCase() ? "var(--text)" : "var(--muted)",
-                  background: activeView === l.toLowerCase() ? "rgba(255,255,255,0.04)" : "transparent",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                }}
-                aria-current={activeView === l.toLowerCase() ? "page" : undefined}
-              >
-                {l}
-              </a>
-            </li>
-          ))}
+        <Link
+          href="/"
+          style={{
+            color: "var(--accent)",
+            fontWeight: 700,
+            marginRight: "12px",
+            textDecoration: "none",
+          }}
+        >
+          af
+        </Link>
+        <div
+          style={{
+            width: "1px",
+            height: "14px",
+            background: "var(--border)",
+            marginRight: "12px",
+          }}
+        />
+        <ul
+          style={{
+            display: "flex",
+            gap: "4px",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+            alignItems: "center",
+          }}
+        >
+          {links.map((l) => {
+            const active = pathname === l.href;
+            const disabled = l.disabled;
+            return (
+              <li key={l.label}>
+                {disabled ? (
+                  <span
+                    style={{
+                      padding: "4px 10px",
+                      color: "var(--muted)",
+                      opacity: 0.4,
+                      cursor: "default",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {l.label}
+                  </span>
+                ) : (
+                  <Link
+                    href={l.href}
+                    style={{
+                      padding: "4px 10px",
+                      color: active ? "var(--text)" : "var(--muted)",
+                      background: active
+                        ? "rgba(255,255,255,0.04)"
+                        : "transparent",
+                      textDecoration: "none",
+                    }}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {l.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
-        <span style={{ marginLeft: "auto", color: "var(--muted)", fontSize: "10px" }}>v0.1.0</span>
+        <span
+          style={{
+            marginLeft: "auto",
+            color: "var(--muted)",
+            fontSize: "10px",
+          }}
+        >
+          v0.1.0
+        </span>
       </nav>
     </header>
   );

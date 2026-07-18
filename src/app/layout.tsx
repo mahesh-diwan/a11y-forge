@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import * as Sentry from "@sentry/nextjs";
 import "./globals.css";
+import { ResultsProvider } from "@/lib/ResultsContext";
 
 if (process.env.SENTRY_DSN) {
   Sentry.init({
@@ -25,13 +26,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${body.variable} ${mono.variable}`}>
       <body className="antialiased">
-        <a
-          href="#main-content"
-          className="fixed -left-[9999px] top-0 z-[100] bg-[var(--accent)] px-4 py-2 font-mono text-sm text-[#000] opacity-0 focus:left-0 focus:opacity-100"
-        >
-          Skip to content
-        </a>
-        {children}
+        <ResultsProvider>
+          <a
+            href="#main-content"
+            className="fixed -left-[9999px] top-0 z-[100] bg-[var(--accent)] px-4 py-2 font-mono text-sm text-[#000] opacity-0 focus:left-0 focus:opacity-100"
+          >
+            Skip to content
+          </a>
+          {children}
+        </ResultsProvider>
       </body>
     </html>
   );
