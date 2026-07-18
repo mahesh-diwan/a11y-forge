@@ -1,12 +1,11 @@
-export function buildSecurityHeaders(env: string, nonce?: string): Headers {
+export function buildSecurityHeaders(env: string, _nonce?: string): Headers {
   const h = new Headers();
 
-  const scriptPolicy = nonce ? `'nonce-${nonce}' 'strict-dynamic'` : "'unsafe-inline'";
   const evalPolicy = env === "development" ? " 'unsafe-eval'" : "";
 
   const csp = [
     "default-src 'self'",
-    `script-src 'self' ${scriptPolicy}${evalPolicy}`,
+    `script-src 'self' 'unsafe-inline'${evalPolicy}`,
     `style-src 'self' 'unsafe-inline'`,
     "img-src 'self' data: https:",
     "connect-src 'self' api.openai.com api.github.com",
