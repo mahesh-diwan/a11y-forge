@@ -137,16 +137,17 @@ export function ScanForm({
         </button>
       )}
       {phase !== "idle" && (
-        {isWorking && (
         <p style={{ marginTop: "8px" }}>
-          <span style={{ display: "block", height: "4px", background: "var(--surface)", borderRadius: 0, overflow: "hidden", marginBottom: "6px" }}>
-            <span style={{ display: "block", height: "4px", width: `${PHASE_PROGRESS[phase]}%`, background: "var(--accent)", }} />
-          </span>
+          {isWorking && (
+            <span style={{ display: "block", height: "4px", background: "var(--surface)", overflow: "hidden", marginBottom: "6px" }}>
+              <span style={{ display: "block", height: "4px", width: `${PHASE_PROGRESS[phase]}%`, background: "var(--accent)" }} />
+            </span>
+          )}
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)" }}>
-            {PHASE_LABELS[phase]} ({elapsed}s)
+            {PHASE_LABELS[phase]}
+            {isWorking && <> ({elapsed}s)</>}
           </span>
         </p>
-      )}
       )}
       {error && (
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--fail)", marginTop: "8px" }}>
