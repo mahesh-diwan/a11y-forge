@@ -22,6 +22,7 @@ interface ResultsState {
   prs: FixPR[];
   activeTab: Tab;
   error: string | null;
+  setError: (v: string | null) => void;
 }
 
 interface ResultsActions {
@@ -30,6 +31,7 @@ interface ResultsActions {
   demo: () => void;
   download: (kind: "report" | "badge" | "pdf") => void;
   setActiveTab: (tab: Tab) => void;
+  setError: (msg: string | null) => void;
 }
 
 const Ctx = createContext<(ResultsState & ResultsActions) | null>(null);
@@ -155,6 +157,7 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
         demo,
         download,
         setActiveTab,
+        setError,
       }}
     >
       {children}
