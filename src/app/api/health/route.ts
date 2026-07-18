@@ -10,3 +10,10 @@ export async function GET() {
     ready: tokenOk,
   });
 }
+
+export async function POST() {
+  return NextResponse.json(
+    { error: { code: "METHOD_NOT_ALLOWED", message: "Use GET" } },
+    { status: 405, headers: { Allow: "GET" } },
+  );
+}

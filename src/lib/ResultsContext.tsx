@@ -6,6 +6,7 @@ import {
   useState,
   useRef,
   useCallback,
+  useEffect,
   type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
@@ -46,6 +47,45 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const downloadLock = useRef<Set<string>>(new Set());
+  const hydrated = useRef(false);
+
+  // Restore last scan result from localStorage on mount
+  useEffect(() => {
+    if (hydrated.current) return;
+    hydrated.current = true;
+    try {
+      const saved = localStorage.getItem("a11y-forge:result");
+      const savedPrs = localStorage.getItem("a11y-forge:prs");
+      const savedUrl = localStorage.getItem("a11y-forge:repoUrl");
+      if (saved && savedUrl) {
+        setResult(JSON.parse(saved));
+        setRepoUrl(savedUrl);
+        if (savedPrs) setPrs(JSON.parse(savedPrs));
+        setPhase("done");
+      }
+    } catch {
+      // Corrupted localStorage, ignore
+    }
+  }, []);
+
+  // Persist to localStorage after scan completes
+  const persist = useCallback((r: ScanResult | null, p: FixPR[], u: string) => {
+    try {
+      if (r) {
+        localStorage.setItem("a11y-forge:result", JSON.stringify(r));
+        localStorage.setItem("a11y-forge:prs", JSON.stringify(p));
+        localStorage.setItem("a11y-forge:repoUrl", u);
+      } else {
+        localStorage.removeItem("a11y-forge:result");
+        localStorage.removeItem("a11y-forge:prs");
+        localStorage.removeItem("a11y-forge:repoUrl");
+      }
+    } catch {
+      // Storage full or unavailable
+    }
+  }, []);
+
+  const prsRef = useRef<FixPR[]>([]);
 
   const scan = useCallback(
     async (url: string) => {
@@ -55,7 +95,9 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
       setError(null);
       setResult(null);
       setPrs([]);
+      prsRef.current = [];
       setPhase("scanning");
+      persist(null, [], url);
 
       const ctrl = new AbortController();
       abortRef.current = ctrl;
@@ -65,8 +107,8 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
         await runWorkflow(url, {
           onPhase: setPhase,
           onLog: () => {},
-          onResult: setResult,
-          onPr: (pr) => setPrs((prev) => [...prev, pr]),
+          onResult: (r) => { setResult(r); persist(r, prsRef.current, url); },
+          onPr: (pr) => { prsRef.current = [...prsRef.current, pr]; setPrs(prsRef.current); },
           signal: ctrl.signal,
           consentToAi: true,
           dryRun: false,
@@ -91,16 +133,19 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
   const demo = useCallback(async () => {
     try {
       const { DEMO_RESULT, DEMO_PRS } = await import("./demo-data");
-      setRepoUrl("github.com/mahesh-diwan/a11y-forge-demo");
+      const url = "github.com/mahesh-diwan/a11y-forge-demo";
+      setRepoUrl(url);
       setError(null);
       setResult(DEMO_RESULT);
       setPrs(DEMO_PRS);
+      prsRef.current = DEMO_PRS;
       setPhase("done");
+      persist(DEMO_RESULT, DEMO_PRS, url);
       router.push("/results");
     } catch {
       setError("Failed to load demo data");
     }
-  }, [router]);
+  }, [router, persist]);
 
   const download = useCallback(
     (kind: "report" | "badge" | "pdf") => {

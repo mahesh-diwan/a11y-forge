@@ -20,7 +20,9 @@ async function handle(req: NextRequest) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) throw new ConfigError("GITHUB_TOKEN not configured");
 
+  const startTs = Date.now();
   const { violations, fileCount } = await scanRepo(repoUrl, token);
+  const scanDuration = Date.now() - startTs;
   const score = calculateScore(violations);
   const screenReader = generateScreenReaderPreview(violations);
   const confidence = scoreConfidence(violations);
@@ -33,6 +35,8 @@ async function handle(req: NextRequest) {
     screenReader,
     confidence,
     coverage,
+    filesScanned: fileCount,
+    scanDuration,
   });
 }
 

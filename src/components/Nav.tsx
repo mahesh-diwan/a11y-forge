@@ -41,6 +41,7 @@ export function Nav() {
       >
         <Link
           href="/"
+          aria-label="a11y-forge home"
           style={{
             color: "var(--accent)",
             fontWeight: 700,
@@ -74,17 +75,14 @@ export function Nav() {
             return (
               <li key={l.label}>
                 {l.disabled ? (
-                  <Link
-                    href={l.href}
+                  <span
                     style={{
                       padding: "4px 10px",
                       color: "var(--muted)",
-                      textDecoration: "none",
                     }}
-                    onClick={() => l.disabled && alert("Scan a repo first")}
                   >
                     {l.label}
-                  </Link>
+                  </span>
                 ) : (
                   <Link
                     href={l.href}
