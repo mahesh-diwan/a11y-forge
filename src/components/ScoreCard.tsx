@@ -45,6 +45,7 @@ export function ScoreCard({ score, download }: ScoreCardProps) {
             <button
               key={k}
               onClick={() => download(k)}
+              aria-label={k === "report" ? "Download HTML report" : k === "badge" ? "Download badge SVG" : "Download PDF report"}
               style={{
                 padding: "6px 12px",
                 background: "transparent",

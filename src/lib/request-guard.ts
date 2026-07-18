@@ -4,9 +4,9 @@ import { sharedLimiter as limiter } from "./rate-limit";
 const MAX_BODY_BYTES = 500_000;
 const MAX_PAYLOAD_BYTES = 2_000_000;
 
-export function guard(req: NextRequest): NextResponse | null {
+export async function guard(req: NextRequest): Promise<NextResponse | null> {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  const rate = limiter.check(ip);
+  const rate = await limiter.check(ip);
   if (!rate.allowed) {
     return NextResponse.json(
       { error: { code: "RATE_LIMITED", message: "Too many requests. Try again later." } },
@@ -26,7 +26,7 @@ export function guard(req: NextRequest): NextResponse | null {
 }
 
 export async function guardAndParse<T>(req: NextRequest): Promise<{ data: T; error: null } | { data: null; error: NextResponse }> {
-  const g = guard(req);
+  const g = await guard(req);
   if (g) return { data: null, error: g };
 
   let body: T;

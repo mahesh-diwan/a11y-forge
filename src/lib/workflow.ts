@@ -48,7 +48,11 @@ export class HttpWorkflowAdapter implements WorkflowAdapter {
       body: JSON.stringify(body),
       signal,
     });
-    if (!res.ok) throw new Error((await res.json()).error || `${path} request failed`);
+    if (!res.ok) {
+      const errBody = await res.json();
+      const msg = typeof errBody.error === "string" ? errBody.error : errBody.error?.message || `${path} request failed`;
+      throw new Error(msg);
+    }
     return res.json();
   }
 

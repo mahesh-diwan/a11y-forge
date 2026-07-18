@@ -6,7 +6,7 @@ export default function DocsPage() {
   return (
     <div
       style={{
-        minHeight: "100dvh",
+        minHeight: "100vh",
         background: "var(--canvas)",
         color: "var(--text)",
       }}

@@ -13,4 +13,31 @@ describe("security-headers", () => {
     const h = buildSecurityHeaders("development");
     expect(h.get("Strict-Transport-Security")).toBeNull();
   });
+  it("development mode includes 'unsafe-eval' in CSP", () => {
+    const h = buildSecurityHeaders("development");
+    expect(h.get("Content-Security-Policy")).toContain("unsafe-eval");
+  });
+  it("production mode omits 'unsafe-eval' in CSP", () => {
+    const h = buildSecurityHeaders("production");
+    expect(h.get("Content-Security-Policy")).not.toContain("unsafe-eval");
+  });
+  it("production mode has HSTS with max-age and includeSubDomains", () => {
+    const h = buildSecurityHeaders("production");
+    const hsts = h.get("Strict-Transport-Security")!;
+    expect(hsts).toContain("max-age=63072000");
+    expect(hsts).toContain("includeSubDomains");
+  });
+  it("sets Referrer-Policy and Permissions-Policy", () => {
+    const h = buildSecurityHeaders("production");
+    expect(h.get("Referrer-Policy")).toBe("strict-origin-when-cross-origin");
+    expect(h.get("Permissions-Policy")).toBe("camera=(), microphone=(), geolocation=()");
+  });
+  it("nonce replaces unsafe-inline in script-src", () => {
+    const h = buildSecurityHeaders("production", "abc123");
+    const csp = h.get("Content-Security-Policy")!;
+    const scriptSrc = csp.match(/script-src[^;]+/)?.[0] ?? "";
+    expect(scriptSrc).toContain("nonce-abc123");
+    expect(scriptSrc).toContain("strict-dynamic");
+    expect(scriptSrc).not.toContain("unsafe-inline");
+  });
 });

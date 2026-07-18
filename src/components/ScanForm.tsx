@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, RefObject } from "react";
+import { FormEvent, RefObject, useState, useEffect } from "react";
 
 type Phase = "idle" | "scanning" | "prioritizing" | "fixing" | "done";
 
@@ -20,7 +20,7 @@ const PHASE_LABELS: Record<Phase, string> = {
   scanning: "Scanning\u2026",
   prioritizing: "Prioritizing\u2026",
   fixing: "Fixing\u2026",
-  done: "Done",
+  done: "Scan",
 };
 
 export function ScanForm({
@@ -34,11 +34,46 @@ export function ScanForm({
   inputRef,
 }: ScanFormProps) {
   const isWorking = phase !== "idle" && phase !== "done";
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (document.getElementById("a11y-spinner-style")) return;
+    const style = document.createElement("style");
+    style.id = "a11y-spinner-style";
+    style.textContent = `
+      @keyframes a11y-spin {
+        to { transform: rotate(360deg); }
+      }
+      .a11y-spinner {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: a11y-spin 0.6s linear infinite;
+        vertical-align: middle;
+        margin-right: 6px;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
+
+  useEffect(() => {
+    if (!isWorking) {
+      setElapsed(0);
+      return;
+    }
+    setElapsed(0);
+    const id = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [isWorking]);
 
   return (
     <div>
       <form
         onSubmit={isWorking ? (e) => { e.preventDefault(); onCancel(); } : onSubmit}
+        noValidate
         style={{ display: "flex", gap: "8px", marginBottom: "8px" }}
       >
         <input
@@ -96,7 +131,9 @@ export function ScanForm({
       )}
       {phase !== "idle" && (
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", marginTop: "8px" }}>
+          {isWorking && <span className="a11y-spinner" />}
           {PHASE_LABELS[phase]}
+          {isWorking && <> ({elapsed}s)</>}
         </p>
       )}
       {error && (

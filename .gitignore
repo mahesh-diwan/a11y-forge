@@ -6,8 +6,12 @@ node_modules/
 next-env.d.ts
 coverage/
 test-results/
+.vercel
+.env*
+
+# Agent artifacts
 .impeccable/
 .superpowers/
-.claude/
-CLAUDE.md
 docs/superpowers/
+CLAUDE.md
+.claude/
