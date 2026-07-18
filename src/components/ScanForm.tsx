@@ -98,7 +98,7 @@ export function ScanForm({
             border: "1px solid var(--border)",
             color: "var(--text)",
             fontFamily: "var(--font-mono)",
-            fontSize: "13px",
+            fontSize: "14px",
           }}
         />
         <button
@@ -109,7 +109,7 @@ export function ScanForm({
             border: "1px solid var(--border)",
             color: isWorking ? "var(--muted)" : "#000",
             fontFamily: "var(--font-mono)",
-            fontSize: "13px",
+            fontSize: "14px",
             fontWeight: 600,
             cursor: "pointer",
           }}

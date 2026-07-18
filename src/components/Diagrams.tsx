@@ -21,15 +21,15 @@ export function PipelineDiagram() {
     <div style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "4px 0" }}>
       {STEPS.map((s, i) => (
         <div key={s.label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", fontWeight: 700, flexShrink: 0, width: "16px", textAlign: "right" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", fontWeight: 700, flexShrink: 0, width: "16px", textAlign: "right" }}>
             {String(i + 1).padStart(2, "0")}
           </span>
           <div style={{ flex: 1, border: "1px solid var(--accent)", padding: "8px 14px", minWidth: 0 }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text)", fontWeight: 600, display: "block" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text)", fontWeight: 600, display: "block" }}>
               {s.label}
             </span>
             {s.sub && (
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "9px", color: "var(--muted)", display: "block", marginTop: "2px" }}>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--muted)", display: "block", marginTop: "2px" }}>
                 {s.sub}
               </span>
             )}
@@ -86,7 +86,7 @@ export function SequenceDiagram() {
               border: "1px solid var(--border)",
               color: COLORS[pi % 3],
               fontWeight: 600,
-              fontSize: "9px",
+              fontSize: "10px",
               wordBreak: "break-word",
             }}
           >
@@ -95,13 +95,13 @@ export function SequenceDiagram() {
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px", minWidth: 0 }}>
             {SEQ.filter((r) => r.from === p).map((r, ri) => (
               <div key={ri} style={{ display: "flex", alignItems: "flex-start", gap: "4px", padding: "2px 0" }}>
-                <span style={{ color: "var(--muted)", fontSize: "9px", flexShrink: 0, width: "14px", textAlign: "center", lineHeight: "14px" }}>
+                <span style={{ color: "var(--muted)", fontSize: "10px", flexShrink: 0, width: "14px", textAlign: "center", lineHeight: "14px" }}>
                   {r.selfLoop ? "\u21bb" : "\u2192"}
                 </span>
-                <span style={{ color: "var(--accent)", flexShrink: 0, fontSize: "9px", wordBreak: "break-word", maxWidth: "35%" }}>
+                <span style={{ color: "var(--accent)", flexShrink: 0, fontSize: "10px", wordBreak: "break-word", maxWidth: "35%" }}>
                   {r.to === r.from ? "" : r.to}
                 </span>
-                <span style={{ color: "var(--muted)", fontSize: "9px", wordBreak: "break-word", lineHeight: "14px" }}>
+                <span style={{ color: "var(--muted)", fontSize: "10px", wordBreak: "break-word", lineHeight: "14px" }}>
                   {r.label}
                 </span>
               </div>

@@ -69,12 +69,12 @@ npm run dev`}
       <div style={{ display: "grid", gap: "8px", marginBottom: "24px" }}>
         {ROUTES.map((r) => (
           <div key={r.path} style={{ border: "1px solid var(--border)", padding: "12px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", fontWeight: 700, flexShrink: 0, padding: "2px 6px", border: "1px solid var(--accent)" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", fontWeight: 700, flexShrink: 0, padding: "2px 6px", border: "1px solid var(--accent)" }}>
               {r.method}
             </span>
             <div>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text)", fontWeight: 600 }}>{r.path}</span>
-              <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "4px 0 0 0" }}>{r.desc}</p>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--text)", fontWeight: 600 }}>{r.path}</span>
+              <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: "4px 0 0 0" }}>{r.desc}</p>
             </div>
           </div>
         ))}
@@ -138,7 +138,7 @@ curl https://a11y-forge.vercel.app/api/badge`}
       <div style={{ display: "grid", gap: "4px", marginBottom: "24px" }}>
         {SCANNERS.map((s) => (
           <div key={s} style={{ border: "1px solid var(--border)", padding: "8px 12px" }}>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0 }}>{s}</p>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: 0 }}>{s}</p>
           </div>
         ))}
       </div>

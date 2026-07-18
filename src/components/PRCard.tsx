@@ -24,7 +24,7 @@ export function PRCard({ pr }: PRCardProps) {
       ) : (
         <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)" }}>dry run</span>
       )}
-      <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--muted)", margin: "4px 0 0 0" }}>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "4px 0 0 0" }}>
         {pr.fixCount} {pr.fixCount === 1 ? "fix" : "fixes"}
         {pr.dryRun && " · dry run"}
       </p>
@@ -34,7 +34,7 @@ export function PRCard({ pr }: PRCardProps) {
             href={pr.url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", textDecoration: "underline", textUnderlineOffset: "3px" }}
+            style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", textDecoration: "underline", textUnderlineOffset: "3px" }}
           >
             View PR →
           </a>

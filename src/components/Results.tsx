@@ -49,10 +49,10 @@ export function Results({ result, prs, activeTab, onTabChange, download }: Resul
         <div role="tabpanel" id="tab-panel-reader" aria-labelledby="tab-reader" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
           {result.screenReader.map((sr, i) => (
             <div key={i} style={{ border: "1px solid var(--border)", padding: "12px" }}>
-              <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", margin: "0 0 4px 0" }}>
+              <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", margin: "0 0 4px 0" }}>
                 {sr.element}
               </p>
-              <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--muted)", margin: 0 }}>
+              <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0 }}>
                 {sr.current} → {sr.fixed}
               </p>
             </div>
@@ -69,13 +69,13 @@ export function Results({ result, prs, activeTab, onTabChange, download }: Resul
       )}
       {activeTab === "diff" && prs.length === 0 && (
         <div role="tabpanel" id="tab-panel-diff" aria-labelledby="tab-diff" style={{ border: "1px solid var(--border)", padding: "16px" }}>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: 0, lineHeight: 1.6 }}>
             No pull requests generated yet.
           </p>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "8px 0 0 0", lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: "8px 0 0 0", lineHeight: 1.6 }}>
             PR generation requires OpenAI API key. If key is missing or quota exhausted, PRs are skipped. Check <code style={{ background: "var(--surface)", padding: "1px 4px" }}>OPENAI_API_KEY</code> env var in Vercel dashboard.
           </p>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", margin: "8px 0 0 0", lineHeight: 1.6 }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--accent)", margin: "8px 0 0 0", lineHeight: 1.6 }}>
             Try demo to see example PRs.
           </p>
         </div>

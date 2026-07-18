@@ -8,7 +8,7 @@ import { useResults } from "@/lib/ResultsContext";
 function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
   useEffect(() => { const t = setTimeout(onDone, 2500); return () => clearTimeout(t); }, [onDone]);
   return (
-    <div style={{ position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)", zIndex: 100, background: "var(--surface)", border: "1px solid var(--border)", padding: "8px 16px", fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)" }}>
+    <div style={{ position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)", zIndex: 100, background: "var(--surface)", border: "1px solid var(--border)", padding: "8px 16px", fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)" }}>
       {msg}
     </div>
   );
@@ -45,7 +45,7 @@ export function Nav() {
           border: "1px solid var(--border)",
           padding: "6px 12px",
           fontFamily: "var(--font-mono)",
-          fontSize: "11px",
+          fontSize: "12px",
         }}
         role="navigation"
         aria-label="Primary"
@@ -123,7 +123,7 @@ export function Nav() {
           style={{
             marginLeft: "auto",
             color: "var(--muted)",
-            fontSize: "10px",
+            fontSize: "11px",
           }}
         >
           v0.1.0
