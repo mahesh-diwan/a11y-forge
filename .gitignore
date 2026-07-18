@@ -5,6 +5,8 @@ node_modules/
 *.tsbuildinfo
 next-env.d.ts
 coverage/
+test-results/
+.impeccable/
 .superpowers/
 .claude/
 CLAUDE.md
