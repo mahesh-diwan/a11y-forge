@@ -25,7 +25,7 @@ interface MermaidProps {
   chart: string;
 }
 
-export function Mermaid({ chart }: MermaidProps) {
+export default function Mermaid({ chart }: MermaidProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [key] = useState(() => Math.random().toString(36).slice(2));
 
