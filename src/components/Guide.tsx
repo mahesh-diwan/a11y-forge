@@ -1,5 +1,3 @@
-"use client";
-
 const STEPS = [
   { num: "01", label: "Scan", desc: "Walk repo tree via GitHub API. Parse AST/JSX/CSS. Run WCAG 2.2 checks per file." },
   { num: "02", label: "Group", desc: "Classify violations by WCAG type. Rank by human impact. Group similar fixes together." },

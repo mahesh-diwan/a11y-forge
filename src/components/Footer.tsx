@@ -1,5 +1,3 @@
-"use client";
-
 export function Footer() {
   return (
     <footer style={{ borderTop: "1px solid var(--border)", padding: "24px 0", marginTop: "48px" }}>
