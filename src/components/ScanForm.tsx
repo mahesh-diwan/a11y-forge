@@ -1,68 +1,109 @@
 "use client";
-import { type FormEvent, type RefObject } from "react";
+
+import { FormEvent, RefObject } from "react";
+
+type Phase = "idle" | "scanning" | "prioritizing" | "fixing" | "done";
 
 interface ScanFormProps {
   repoUrl: string;
   onUrlChange: (v: string) => void;
   onSubmit: (e: FormEvent) => void;
   onCancel: () => void;
-  phase: string;
+  onDemo: () => void;
+  phase: Phase;
   error: string | null;
-  inputRef?: RefObject<HTMLInputElement | null>;
+  inputRef: RefObject<HTMLInputElement | null>;
 }
+
+const PHASE_LABELS: Record<Phase, string> = {
+  idle: "Scan",
+  scanning: "Scanning\u2026",
+  prioritizing: "Prioritizing\u2026",
+  fixing: "Fixing\u2026",
+  done: "Done",
+};
 
 export function ScanForm({
   repoUrl,
   onUrlChange,
   onSubmit,
   onCancel,
+  onDemo,
   phase,
   error,
   inputRef,
 }: ScanFormProps) {
+  const isWorking = phase !== "idle" && phase !== "done";
+
   return (
-    <form onSubmit={onSubmit} className="flex items-center gap-2">
-      <div className="relative flex-1">
+    <div>
+      <form
+        onSubmit={isWorking ? (e) => { e.preventDefault(); onCancel(); } : onSubmit}
+        style={{ display: "flex", gap: "8px", marginBottom: "8px" }}
+      >
         <input
           ref={inputRef}
-          type="text"
+          type="url"
           value={repoUrl}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="https://github.com/owner/repo"
-          aria-label="GitHub repo URL"
-          className="w-full rounded-lg border bg-transparent px-3 py-2 font-mono text-sm outline-none transition"
+          disabled={isWorking}
+          aria-label="GitHub repository URL"
           style={{
-            borderColor: "var(--color-border)",
-            color: "var(--color-text)",
+            flex: 1,
+            padding: "10px 12px",
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            color: "var(--text)",
+            fontFamily: "var(--font-mono)",
+            fontSize: "13px",
           }}
         />
-      </div>
-      {phase === "idle" ? (
         <button
           type="submit"
-          className="rounded-lg px-4 py-2 font-mono text-sm font-bold transition active:scale-[0.97]"
-          style={{ background: "var(--color-pass)", color: "#000" }}
-        >
-          Scan
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-lg border px-4 py-2 font-mono text-sm transition"
           style={{
-            borderColor: "var(--color-fail)",
-            color: "var(--color-fail)",
+            padding: "10px 20px",
+            background: isWorking ? "var(--surface)" : "var(--accent)",
+            border: "1px solid var(--border)",
+            color: isWorking ? "var(--muted)" : "#000",
+            fontFamily: "var(--font-mono)",
+            fontSize: "13px",
+            fontWeight: 600,
+            cursor: "pointer",
           }}
         >
-          Cancel
+          {isWorking ? "Cancel" : PHASE_LABELS[phase]}
+        </button>
+      </form>
+      {phase === "idle" && (
+        <button
+          type="button"
+          onClick={onDemo}
+          style={{
+            background: "none",
+            border: "none",
+            color: "var(--accent)",
+            fontFamily: "var(--font-mono)",
+            fontSize: "12px",
+            cursor: "pointer",
+            padding: 0,
+            textDecoration: "underline",
+            textUnderlineOffset: "3px",
+          }}
+        >
+          try demo repo →
         </button>
       )}
+      {phase !== "idle" && (
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", marginTop: "8px" }}>
+          {PHASE_LABELS[phase]}
+        </p>
+      )}
       {error && (
-        <p className="text-xs" style={{ color: "var(--color-fail)" }}>
+        <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--fail)", marginTop: "8px" }}>
           {error}
         </p>
       )}
-    </form>
+    </div>
   );
 }
