@@ -16,4 +16,4 @@ web
 
 ## Design Reference
 
-Design system documented in `DESIGN.md`. Key decisions: warm charcoal ink `#141210`, violet pass `#b087f9`, no glass, no eyebrows, asymmetric hero, bento card grids, custom cubic-bezier motion.
+Design system documented in `DESIGN.md`. Current: charcoal canvas `#121212`, amber accent `#ffb700`, single-layer card system, 2-col catalog grid, mini hero (no 3D). No violet, no glass, no bento, no film grain.
