@@ -28,7 +28,7 @@ Warm, capable, reliable. More human than a typical dev tool — precise enough t
 
 ## Anti-references
 
-Generic SaaS default — warm-cream/blue palettes, hero-metric big-number templates, decorative glassmorphism, identical card grids, eyebrow scaffolding on every section. Also: cold dark-mode dev tools with a single neon accent — the "AI template" look. equity should read as a serious instrument with warmth, not as a template.
+Generic SaaS default — warm-cream/blue palettes, hero-metric big-number templates, decorative glassmorphism, identical card grids, eyebrow scaffolding on every section. Also: cold dark-mode dev tools with a single neon accent — the "AI template" look. a11y-forge should read as a serious instrument with warmth, not as a template.
 
 ## Design Principles
 

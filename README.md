@@ -1,10 +1,10 @@
-# equity
+# a11y-forge
 
 Dark CLI-style accessibility scanner. Scans GitHub repos for WCAG violations, prioritizes by human impact, and opens fix PRs automatically.
 
 ## What it does
 
-Point equity at a public GitHub repo. It runs a static WCAG scan (AST + crawler), scores the repo (A+–F), groups violations by impact via GPT-5.6, generates minimal behavior-preserving fixes, and opens one PR per fix group. Falls back to deterministic grouping + regex fixes when no OpenAI key is present.
+Point a11y-forge at a public GitHub repo. It runs a static WCAG scan (AST + crawler), scores the repo (A+–F), groups violations by impact via GPT-5.6, generates minimal behavior-preserving fixes, and opens one PR per fix group. Falls back to deterministic grouping + regex fixes when no OpenAI key is present.
 
 Pipeline: **scan → prioritize → fix → PR**.
 
