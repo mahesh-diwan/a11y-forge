@@ -57,6 +57,7 @@ export function Nav() {
             background: "var(--border)",
             marginRight: "12px",
           }}
+          aria-hidden="true"
         />
         <ul
           style={{
@@ -70,21 +71,20 @@ export function Nav() {
         >
           {links.map((l) => {
             const active = pathname === l.href;
-            const disabled = l.disabled;
             return (
               <li key={l.label}>
-                {disabled ? (
-                  <span
+                {l.disabled ? (
+                  <Link
+                    href={l.href}
                     style={{
                       padding: "4px 10px",
                       color: "var(--muted)",
-                      opacity: 0.4,
-                      cursor: "default",
                       textDecoration: "none",
                     }}
+                    onClick={() => l.disabled && alert("Scan a repo first")}
                   >
                     {l.label}
-                  </span>
+                  </Link>
                 ) : (
                   <Link
                     href={l.href}

@@ -4,19 +4,21 @@ import { MemoryRateLimiter } from "./lib/rate-limit";
 
 const limiter = new MemoryRateLimiter();
 
-export function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-  const headers = buildSecurityHeaders(process.env.NODE_ENV ?? "development");
+function applySecurityHeaders(res: NextResponse, env: string) {
+  const headers = buildSecurityHeaders(env);
   headers.forEach((v: string, k: string) => res.headers.set(k, v));
+  return res;
+}
 
+export function proxy(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     req.headers.get("x-real-ip")?.trim() ||
     "unknown";
   const r = limiter.check(ip);
-  res.headers.set("X-RateLimit-Remaining", String(r.remaining));
+
   if (!r.allowed) {
-    return NextResponse.json(
+    const res = NextResponse.json(
       {
         error: {
           code: "RATE_LIMITED",
@@ -25,7 +27,12 @@ export function middleware(req: NextRequest) {
       },
       { status: 429, headers: { "Retry-After": String(r.resetAfter) } },
     );
+    return applySecurityHeaders(res, process.env.NODE_ENV ?? "development");
   }
+
+  const res = NextResponse.next();
+  applySecurityHeaders(res, process.env.NODE_ENV ?? "development");
+  res.headers.set("X-RateLimit-Remaining", String(r.remaining));
   return res;
 }
 

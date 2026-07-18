@@ -13,9 +13,9 @@ export function Guide() {
       </h2>
       <div style={{ width: "48px", height: "3px", background: "var(--accent)", marginBottom: "24px" }} />
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px" }}>
+      <ol style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px", listStyle: "none", margin: 0, padding: 0 }}>
         {STEPS.map((s) => (
-          <div key={s.num} style={{ border: "1px solid var(--border)", padding: "16px" }}>
+          <li key={s.num} style={{ border: "1px solid var(--border)", padding: "16px" }}>
             <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", margin: "0 0 4px 0" }}>
               {s.num}
             </p>
@@ -25,9 +25,9 @@ export function Guide() {
             <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
               {s.desc}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
 
       <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", marginTop: "16px" }}>
         4-step pipeline. ~2 min per repo.

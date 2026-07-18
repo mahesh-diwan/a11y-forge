@@ -23,9 +23,10 @@ mermaid.initialize({
 
 interface MermaidProps {
   chart: string;
+  label?: string;
 }
 
-export default function Mermaid({ chart }: MermaidProps) {
+export default function Mermaid({ chart, label }: MermaidProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [key] = useState(() => Math.random().toString(36).slice(2));
 
@@ -35,10 +36,15 @@ export default function Mermaid({ chart }: MermaidProps) {
     const id = `m-${key}`;
     mermaid.render(id, chart).then(({ svg }) => {
       el.innerHTML = svg;
+      const svgEl = el.querySelector("svg");
+      if (svgEl) {
+        svgEl.setAttribute("role", "img");
+        svgEl.setAttribute("aria-label", label || "Architecture diagram");
+      }
     }).catch(() => {
       el.innerHTML = `<span class="font-mono text-xs" style="color:var(--fail)">diagram render failed</span>`;
     });
-  }, [chart, key]);
+  }, [chart, key, label]);
 
   return (
     <div ref={ref} className="mermaid flex justify-center overflow-x-auto py-2" />

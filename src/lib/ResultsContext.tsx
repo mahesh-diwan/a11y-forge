@@ -49,6 +49,8 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
 
   const scan = useCallback(
     async (url: string) => {
+      abortRef.current?.abort();
+
       setRepoUrl(url);
       setError(null);
       setResult(null);
@@ -132,7 +134,7 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
                 ? "a11y-badge.svg"
                 : "a11y-report.html";
           a.click();
-          URL.revokeObjectURL(url);
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
         })
         .catch(() => {})
         .finally(() => {

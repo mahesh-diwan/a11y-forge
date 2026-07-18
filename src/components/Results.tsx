@@ -38,7 +38,7 @@ export function Results({ result, prs, activeTab, onTabChange, download }: Resul
       />
 
       {activeTab === "violations" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
+        <div role="tabpanel" id="tab-panel-violations" aria-labelledby="tab-violations" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
           {result.violations.map((v, i) => (
             <ViolationCard key={`${v.file}-${v.line}-${i}`} v={v} />
           ))}
@@ -46,7 +46,7 @@ export function Results({ result, prs, activeTab, onTabChange, download }: Resul
       )}
 
       {activeTab === "reader" && result.screenReader && result.screenReader.length > 0 && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
+        <div role="tabpanel" id="tab-panel-reader" aria-labelledby="tab-reader" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
           {result.screenReader.map((sr, i) => (
             <div key={i} style={{ border: "1px solid var(--border)", padding: "12px" }}>
               <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", margin: "0 0 4px 0" }}>
@@ -61,7 +61,7 @@ export function Results({ result, prs, activeTab, onTabChange, download }: Resul
       )}
 
       {activeTab === "diff" && prs.length > 0 && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
+        <div role="tabpanel" id="tab-panel-diff" aria-labelledby="tab-diff" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "8px" }}>
           {prs.map((pr) => (
             <PRCard key={pr.url || pr.category} pr={pr} />
           ))}
