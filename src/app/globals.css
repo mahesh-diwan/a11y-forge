@@ -1,114 +1,38 @@
-@import "tailwindcss";
+:root {
+  --canvas: #000000;
+  --surface: #1a1a1a;
+  --text: #ffffff;
+  --muted: #666;
+  --accent: #ffb700;
+  --fail: #ff3b3b;
+  --border: #333;
 
-@theme inline {
-  --color-ink: #0a0908;
-  --color-canvas: #121212;
-  --color-surface: #1e1e1e;
-  --color-surface-hover: #262626;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-text: #e8e8e8;
-  --color-muted: #888;
-  --color-pass: #ffb700;
-  --color-pass-bg: rgba(255, 183, 0, 0.12);
-  --color-fail: #ff5c5c;
-  --color-fail-bg: rgba(255, 92, 92, 0.1);
-  --color-focus: #ffb700;
-  --color-warn: #ffb700;
-  --font-display: "Syne", sans-serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --transition-fast: 150ms;
-  --transition-normal: 250ms;
-  --transition-slow: 400ms;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", monospace;
+  --font-display: "Arial Black", "Helvetica Now Display", "Impact", sans-serif;
 }
 
 * {
-  border-color: var(--color-border);
-}
-
-html {
-  background: var(--color-canvas);
-  color: var(--color-text);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 body {
-  background: var(--color-canvas);
+  background: var(--canvas);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-/* Signature focus ring */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-[tabindex]:focus-visible {
-  outline: 2px solid var(--color-focus);
+::selection {
+  background: var(--accent);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
-}
-
-/* Semantic badge accents */
-.v-badge-fail {
-  color: var(--color-fail);
-}
-.v-badge-pass {
-  color: var(--color-pass);
-}
-.v-badge-warn {
-  color: var(--color-warn);
-}
-
-/* Disabled form control state */
-input:disabled,
-button:disabled,
-textarea:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* Premium motion curve */
-.ease-premium {
-  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-/* Scroll reveal with blur */
-.reveal {
-  opacity: 0;
-  transform: translateY(2rem);
-  filter: blur(4px);
-  transition:
-    opacity 0.8s cubic-bezier(0.32, 0.72, 0, 1),
-    transform 0.8s cubic-bezier(0.32, 0.72, 0, 1),
-    filter 0.8s cubic-bezier(0.32, 0.72, 0, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-  will-change: auto;
-}
-.reveal:not(.is-visible) {
-  will-change: transform, opacity, filter;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-  input:disabled,
-  button:disabled {
-    transition: none;
-  }
 }
