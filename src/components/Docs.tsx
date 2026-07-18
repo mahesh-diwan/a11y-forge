@@ -84,31 +84,31 @@ npm run dev`}
         API Examples
       </h2>
       <div style={{ display: "grid", gap: "12px", marginBottom: "24px" }}>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`# POST /api/scan
 curl -X POST https://a11y-forge.vercel.app/api/scan \\
   -H "Content-Type: application/json" \\
   -d '{"repoUrl": "https://github.com/owner/repo"}'`}
         </pre>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`# POST /api/prioritize
 curl -X POST https://a11y-forge.vercel.app/api/prioritize \\
   -H "Content-Type: application/json" \\
   -d '{"violations": [...], "consentToAi": true}'`}
         </pre>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`# POST /api/pr
 curl -X POST https://a11y-forge.vercel.app/api/pr \\
   -H "Content-Type: application/json" \\
   -d '{"repoUrl": "https://github.com/owner/repo", "group": {...}}'`}
         </pre>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`# POST /api/report
 curl -X POST https://a11y-forge.vercel.app/api/report \\
   -H "Content-Type: application/json" \\
   -d '{"violations": [...], "score": 42}'`}
         </pre>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`# POST /api/badge (custom)
 curl -X POST https://a11y-forge.vercel.app/api/badge \\
   -H "Content-Type: application/json" \\
@@ -120,7 +120,7 @@ curl https://a11y-forge.vercel.app/api/badge`}
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "8px 0 0 0" }}>
           Example scan response:
         </p>
-        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px" }}>
+        <pre style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.8, border: "1px solid var(--border)", padding: "12px", overflowX: "auto" }}>
 {`{
   "violations": [
     { "type": "missing-alt-text", "count": 3, "severity": "error" },
