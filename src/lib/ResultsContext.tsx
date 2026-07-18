@@ -57,12 +57,8 @@ export function ResultsProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem("a11y-forge:result");
       const savedPrs = localStorage.getItem("a11y-forge:prs");
       const savedUrl = localStorage.getItem("a11y-forge:repoUrl");
-      if (saved && savedUrl) {
-        setResult(JSON.parse(saved));
-        setRepoUrl(savedUrl);
-        if (savedPrs) setPrs(JSON.parse(savedPrs));
-        setPhase("done");
-      }
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (saved && savedUrl) { setResult(JSON.parse(saved)); setRepoUrl(savedUrl); if (savedPrs) setPrs(JSON.parse(savedPrs)); setPhase("done"); }
     } catch {
       // Corrupted localStorage, ignore
     }

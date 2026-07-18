@@ -60,10 +60,9 @@ export function ScanForm({
   }, []);
 
   useEffect(() => {
-    if (!isWorking) {
-      setElapsed(0);
-      return;
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!isWorking) { setElapsed(0); return; }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setElapsed(0);
     const id = setInterval(() => setElapsed((s) => s + 1), 1000);
     return () => clearInterval(id);

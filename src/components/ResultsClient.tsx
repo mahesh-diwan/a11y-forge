@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useResults } from "@/lib/ResultsContext";
 import { Results } from "@/components/Results";
 
@@ -10,9 +11,9 @@ export function ResultsClient() {
     return (
       <p style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--muted)", textAlign: "center", padding: "120px 0" }}>
         No results yet.{" "}
-        <a href="/" style={{ color: "var(--accent)" }}>
+        <Link href="/" style={{ color: "var(--accent)" }}>
           Scan a repo
-        </a>{" "}
+        </Link>{" "}
         first.
       </p>
     );
