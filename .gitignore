@@ -8,6 +8,7 @@ coverage/
 test-results/
 .vercel
 .env*
+!.env.local.example
 
 # Agent artifacts
 .impeccable/
