@@ -47,17 +47,17 @@ Winners announced: ~Aug 12
 
 ### Track: Developer Tools
 
-| Requirement          | Status | Notes                                                   |
-| -------------------- | ------ | ------------------------------------------------------- |
-| Uses Codex           | ✅     | Entire project built via opencode/Codex CLI             |
-| Uses GPT-5.6         | ✅     | `/api/prioritize` calls OpenAI for violation grouping   |
-| Working demo         | ✅     | Deployed at https://a11y-forge.vercel.app               |
-| New or extended      | ⚠️     | Pre-existing project — must document prior vs. new work |
-| Demo video           | ❌     | Need to create                                          |
-| Codex Session ID     | ⚠️     | Need to identify session ID from opencode workflow      |
-| README Codex section | ❌     | Need to add                                             |
-| Repo shared          | ⚠️     | Need to share with judging emails                       |
-| Installation guide   | ✅     | README covers it                                        |
+| Requirement          | Status | Notes                                                                                                                              |
+| -------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Uses Codex           | ⚠️     | Codex CLI installed, logged in, 3 session IDs. Quota exhausted — see README                                                        |
+| Uses GPT-5.6         | ✅     | `/api/prioritize` calls OpenAI for violation grouping                                                                              |
+| Working demo         | ✅     | Deployed at https://a11y-forge.vercel.app                                                                                          |
+| New or extended      | ⚠️     | Pre-existing project — must document prior vs. new work                                                                            |
+| Demo video           | ❌     | Need to create                                                                                                                     |
+| Codex Session ID     | ✅     | 3 sessions: `019f7944-cb18-7b53-b645-30ca77d30ccd`, `019f7946-93b3-7592-b24e-ef2b9d5f9fec`, `019f7949-77f2-7a41-8887-153567c84691` |
+| README Codex section | ✅     | Added — honest framing: Codex installed, quota blocked, GPT runtime                                                                |
+| Repo shared          | ⚠️     | Need to share with judging emails                                                                                                  |
+| Installation guide   | ✅     | README covers it                                                                                                                   |
 
 ### Pre-existing vs. New Work (Submission Period: Jul 13–21)
 
@@ -94,16 +94,13 @@ Winners announced: ~Aug 12
 
 - Git commit history shows dates: `git log --after="2026-07-13" --oneline`
 - Deployed site: https://a11y-forge.vercel.app
-- README documents Codex usage
+- README documents AI tool usage — Codex CLI installed + session IDs, GPT-5.6 at runtime, opencode dev workflow
 
 ## Submission Checklist
 
 - [ ] Create demo video (<3 min, YouTube public)
 - [x] Add Codex collaboration section to README
-- [ ] Provide Codex Session ID (run `/feedback` in opencode CLI on primary session)
-  - Primary build session: `ses_08f59b3fdffesJCNH5cSEGHqQh` (Sprint 1 — Visual Redesign)
-  - Secondary: `ses_08f598f93ffeJFMZr46h22gJgu` (Sprint 2 — System Robustness)
-  - View all 89 a11y-forge sessions: `opencode session list`
+- [x] Codex Session IDs captured: `019f7944-cb18-7b53-b645-30ca77d30ccd`, `019f7946-93b3-7592-b24e-ef2b9d5f9fec`, `019f7949-77f2-7a41-8887-153567c84691`
 - [ ] Share repo with `testing@devpost.com` and `build-week-event@openai.com`
 - [ ] Choose Developer Tools track on Devpost
 - [ ] Fill submission form on openai.devpost.com
@@ -113,7 +110,7 @@ Winners announced: ~Aug 12
 
 1. **Problem** (30s): Web accessibility compliance is manual, expensive, rarely done. Millions of sites fail WCAG.
 2. **Solution** (30s): a11y-forge — autonomous scanner. Paste GitHub repo URL → get violations, score, prioritized fixes.
-3. **How Codex helped** (60s): Codex CLI built the entire project — API routes, scanner engine, UI, deployment config. Iterative prompting refined scan logic, fixed mobile layout bugs, added progress bar, stabilized CSP.
+3. **How AI tools helped** (60s): Project built with AI coding agents — opencode for development workflow, Codex CLI installed and configured during Build Week (session IDs on GitHub). GPT-5.6 powers the runtime AI grouping engine. Free-tier quota blocked full Codex execution but the AI-assisted dev loop accelerated everything else.
 4. **Demo** (30s): Live scan of `mahesh-diwan/a11y-forge` → 59 violations, score display, drill-down per violation, screen reader preview.
 5. **Impact** (20s): Makes accessibility testing free, instant, automated. Every open-source repo can get a score.
 

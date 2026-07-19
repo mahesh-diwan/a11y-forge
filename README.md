@@ -2,18 +2,31 @@
 
 Dark CLI-style accessibility scanner. Scans GitHub repos for WCAG violations, prioritizes by human impact, and opens fix PRs automatically.
 
-## Built with Codex
+## Built for OpenAI Build Week 2026
 
-Developed entirely using [opencode](https://opencode.ai) (Codex CLI) during OpenAI Build Week 2026. Key ways Codex accelerated development:
+Developed during [OpenAI Build Week](https://openai.devpost.com) — an autonomous WCAG scanner powered by AI tools.
 
-- **API scaffolding**: Generated all 6 API routes (scan, prioritize, pr, report, report/pdf, badge) from natural-language pipeline descriptions.
-- **Scanner engine**: Implemented 12 WCAG check types — AST traversal for HTML/JSX/TSX/Vue/Svelte, CSS property inspection, regex patterns.
-- **UI components**: Built ScanForm, ScoreCard, ViolationCard, Results, Navigation with mobile-responsive layout via conversational prompts.
-- **Bug fixes**: Resolved Next.js 16 CSP crash, loading.tsx skeleton bug, mobile overflow, sticky footer.
-- **Testing**: Generated and maintained 165 vitest unit tests + 3 Playwright e2e tests.
-- **Deployment**: Configured Vercel deploy, environment variables, CSP headers, production build pipeline.
+### GPT-5.6 at runtime
 
-Codex handled boilerplate, test generation, and bug diagnosis. We focused on product decisions, WCAG rule design, and UX.
+The core intelligence runs on **OpenAI GPT-5.6**. When a user scans a repo, violations are grouped by category and ranked by user impact via `/api/prioritize` — a real-time call to `gpt-5.6-sol`. This powers the AI grouping that makes the output useful instead of a raw list of errors.
+
+### AI-assisted development
+
+The project was built using AI coding agents throughout:
+
+- **[opencode](https://opencode.ai)** — an AI coding CLI that handled scaffolding, testing, debugging, and deployment. Generated API routes, scanner checks, UI components, and 165 unit tests via conversational prompts.
+- **Codex CLI** — Installed and configured during Build Week. Session IDs: `019f7944-cb18-7b53-b645-30ca77d30ccd`, `019f7946-93b3-7592-b24e-ef2b9d5f9fec`, `019f7949-77f2-7a41-8887-153567c84691`. Full execution was blocked by API quota exhaustion on the free-tier key.
+
+### Key AI contributions
+
+| Area           | How AI helped                                                         |
+| -------------- | --------------------------------------------------------------------- |
+| API design     | Generated 6 API route scaffolds from natural-language descriptions    |
+| Scanner engine | Implemented 12 WCAG check types (AST, CSS, regex)                     |
+| UI             | Built responsive components through iterative prompts                 |
+| Bug fixes      | Diagnosed Next.js 16 CSP crash, skeleton loading bug, mobile overflow |
+| Testing        | Maintained 165 vitest + 3 Playwright e2e tests                        |
+| Deployment     | Configured Vercel pipeline, env vars, CSP headers                     |
 
 ## Features
 
