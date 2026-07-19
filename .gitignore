@@ -26,3 +26,6 @@ voiceover/
 # Docs (keep only DEPLOY.md)
 docs/a11y-snapshot-*.md
 docs/images/
+
+# Old standalone test files
+src/test_*.cjs
