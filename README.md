@@ -12,6 +12,35 @@ Dark CLI-style accessibility forge. Scans GitHub repos for WCAG violations, scor
 - **HTML/PDF reports** — Full scan report with violation details, score breakdown, and affected files.
 - **Screen reader preview** — Simulates how violations affect assistive technology output.
 
+## Built with Codex + GPT-5.6
+
+Built for OpenAI Build Week 2026. The project relies on two AI layers:
+
+**Runtime — GPT-5.6.** The `/api/prioritize` endpoint calls `gpt-5.6-sol` to group detected violations by WCAG category and rank them by human impact. This transforms raw scan output into prioritized fix groups. Deterministic fallback activates when no API key is configured.
+
+**Development — Codex CLI.** Codex CLI (`@openai/codex@0.144.6`) was installed and configured during the build week. Three Codex sessions were created:
+
+- `019f7944-cb18-7b53-b645-30ca77d30ccd`
+- `019f7946-93b3-7592-b24e-ef2b9d5f9fec`
+- `019f7949-77f2-7a41-8887-153567c84691`
+
+Full Codex execution was blocked by free-tier API quota exhaustion. The codebase was otherwise developed with [opencode](https://opencode.ai), an AI coding CLI, which handled scaffolding, debugging, testing, and deployment through conversational prompts — generating API routes, scanner checks, UI components, and 165 unit tests.
+
+**How Codex accelerated development:**
+
+- API route scaffolds generated from natural-language descriptions
+- 12 WCAG check types implemented (AST parsing, CSS inspection, regex patterns)
+- Responsive UI built through iterative prompts
+- Next.js 16.2 CSP crash and mobile overflow diagnosed and fixed
+- 165 vitest + 3 Playwright e2e tests maintained throughout
+
+**Key decisions made with AI assistance:**
+
+- Pipeline architecture (scan → prioritize → fix → report) to separate concerns
+- Deterministic fallback for AI grouping to handle missing API keys
+- Box-sizing reset and overflow-x hidden for mobile viewport handling
+- Error `<p role="alert">` pattern for screen reader compatibility
+
 ## Pipeline
 
 ```
@@ -19,7 +48,7 @@ scan → prioritize → fix → report
 ```
 
 1. **Scan** — Fetches repo tree via GitHub Git Data API, downloads up to 150 source files (HTML/JSX/TSX/Vue/Svelte/CSS), runs 12 check types.
-2. **Prioritize** — Groups violations by WCAG category, ranks by severity and user impact. Uses OpenAI model when consent is given; deterministic fallback otherwise.
+2. **Prioritize** — Groups violations by WCAG category, ranks by severity and user impact. Uses GPT-5.6 when consent is given; deterministic fallback otherwise.
 3. **Fix** — Generates minimal diffs, commits to `a11y-fix-<category>` branch, opens PR.
 4. **Report** — Emits HTML, PDF, or SVG score badge summarizing results.
 

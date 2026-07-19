@@ -1,0 +1,94 @@
+1
+00:00:04,000 --> 00:00:09,000
+Web accessibility is a legal requirement,
+but most open source projects never get audited.
+
+2
+00:00:09,000 --> 00:00:12,500
+Manual testing is slow, expensive,
+and rarely done.
+
+3
+00:00:12,500 --> 00:00:14,500
+a11y-forge changes that.
+
+4
+00:00:14,500 --> 00:00:22,768
+It is an autonomous scanner that checks any
+GitHub repo against WCAG standards in seconds.
+
+5
+00:00:23,000 --> 00:00:27,000
+Here is how it works. Paste any public
+GitHub repository URL, like this one, and click Scan.
+
+6
+00:00:27,000 --> 00:00:32,000
+a11y-forge pulls the source tree via the GitHub API,
+runs 12 static WCAG checks across HTML, JSX, CSS, and Vue files.
+
+7
+00:00:32,000 --> 00:00:37,000
+And scores the repo from A-plus to F.
+The progress bar shows each stage.
+
+8
+00:00:37,000 --> 00:00:50,984
+Scanning, prioritizing violations by impact,
+and generating results.
+
+9
+00:00:51,000 --> 00:00:56,000
+Results are shown immediately. The score card
+gives you a clear grade with a breakdown of violations by type.
+
+10
+00:00:56,000 --> 00:01:02,000
+Each violation shows the file, line number,
+severity, and a confidence score.
+
+11
+00:01:02,000 --> 00:01:08,000
+The screen reader preview simulates how these
+issues affect assistive technology users.
+
+12
+00:01:08,000 --> 00:01:13,344
+You can drill into every finding
+to understand exactly what needs to be fixed.
+
+13
+00:01:13,000 --> 00:01:18,000
+The documentation covers everything you need,
+quick start guide, full API reference with curl examples.
+
+14
+00:01:18,000 --> 00:01:24,000
+And a detailed scanner reference showing all
+12 WCAG check types from color contrast to keyboard traps.
+
+15
+00:01:24,000 --> 00:01:31,720
+The project includes HTML and PDF report generation,
+and SVG badge creation.
+
+16
+00:01:32,000 --> 00:01:37,000
+a11y-forge is open source, built during
+OpenAI Build Week 2026 using Codex CLI.
+
+17
+00:01:37,000 --> 00:01:42,000
+The runtime uses OpenAI GPT-5.6 to intelligently
+group violations by user impact.
+Codex accelerated development with conversational coding.
+
+18
+00:01:42,000 --> 00:01:48,000
+Try it yourself. Paste any public repo URL
+and see your score in seconds.
+
+19
+00:01:48,000 --> 00:01:54,720
+Every open source project
+deserves to be accessible.
