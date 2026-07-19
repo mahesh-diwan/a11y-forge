@@ -18,13 +18,7 @@ Built for OpenAI Build Week 2026. The project relies on two AI layers:
 
 **Runtime — GPT-5.6.** The `/api/prioritize` endpoint calls `gpt-5.6-sol` to group detected violations by WCAG category and rank them by human impact. This transforms raw scan output into prioritized fix groups. Deterministic fallback activates when no API key is configured.
 
-**Development — Codex CLI.** Codex CLI (`@openai/codex@0.144.6`) was installed and configured during the build week. Three Codex sessions were created:
-
-- `019f7944-cb18-7b53-b645-30ca77d30ccd`
-- `019f7946-93b3-7592-b24e-ef2b9d5f9fec`
-- `019f7949-77f2-7a41-8887-153567c84691`
-
-Full Codex execution was blocked by free-tier API quota exhaustion. The codebase was otherwise developed with [opencode](https://opencode.ai), an AI coding CLI, which handled scaffolding, debugging, testing, and deployment through conversational prompts — generating API routes, scanner checks, UI components, and 165 unit tests.
+**Development — Codex CLI.** Codex CLI (`@openai/codex@0.144.6`) was installed and configured during the build week. Full execution was blocked by free-tier API quota exhaustion. The codebase was otherwise developed with [opencode](https://opencode.ai), an AI coding CLI, which handled scaffolding, debugging, testing, and deployment through conversational prompts — generating API routes, scanner checks, UI components, and 165 unit tests.
 
 **How Codex accelerated development:**
 
