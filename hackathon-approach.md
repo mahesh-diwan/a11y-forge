@@ -13,11 +13,13 @@ Winners announced: ~Aug 12
 ## Key Rules
 
 ### Eligibility
+
 - Open to individuals/teams in supported countries
 - Age of majority in jurisdiction
 - No purchase necessary
 
 ### Project Requirements
+
 - **Must use Codex and GPT-5.6** in some capacity
 - **New or meaningfully extended** from existing work
 - **Pre-existing projects**: must clearly document what was existing vs. new
@@ -25,6 +27,7 @@ Winners announced: ~Aug 12
 - **4 tracks**: Apps for Your Life, Work & Productivity, Developer Tools, Education
 
 ### Submission Requirements
+
 1. **Demo video** — <3 min, public YouTube, audio explaining what you built and how Codex/GPT were used
 2. **Code repo** — public or shared with `testing@devpost.com` and `build-week-event@openai.com`
 3. **README** — must describe Codex collaboration (how Codex accelerated workflow, key decisions made)
@@ -32,32 +35,34 @@ Winners announced: ~Aug 12
 5. **Installation/testing instructions** for plugins/dev tools
 
 ### Judging Criteria (equally weighted)
-| Criterion | What judges look for |
-|-----------|---------------------|
+
+| Criterion                    | What judges look for                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------- |
 | Technological Implementation | How thoroughly Codex is used. Code reflects genuine effort. Working, non-trivial. |
-| Design | Complete, coherent product experience. Not just proof-of-concept. |
-| Potential Impact | Solves real problem for real audience. Solution addresses problem based on demo. |
-| Quality of Idea | Creative, novel. Differs from existing concepts. |
+| Design                       | Complete, coherent product experience. Not just proof-of-concept.                 |
+| Potential Impact             | Solves real problem for real audience. Solution addresses problem based on demo.  |
+| Quality of Idea              | Creative, novel. Differs from existing concepts.                                  |
 
 ## How a11y-forge Fits
 
 ### Track: Developer Tools
 
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| Uses Codex | ✅ | Entire project built via opencode/Codex CLI |
-| Uses GPT-5.6 | ✅ | `/api/prioritize` calls OpenAI for violation grouping |
-| Working demo | ✅ | Deployed at https://a11y-forge.vercel.app |
-| New or extended | ⚠️ | Pre-existing project — must document prior vs. new work |
-| Demo video | ❌ | Need to create |
-| Codex Session ID | ⚠️ | Need to identify session ID from opencode workflow |
-| README Codex section | ❌ | Need to add |
-| Repo shared | ⚠️ | Need to share with judging emails |
-| Installation guide | ✅ | README covers it |
+| Requirement          | Status | Notes                                                   |
+| -------------------- | ------ | ------------------------------------------------------- |
+| Uses Codex           | ✅     | Entire project built via opencode/Codex CLI             |
+| Uses GPT-5.6         | ✅     | `/api/prioritize` calls OpenAI for violation grouping   |
+| Working demo         | ✅     | Deployed at https://a11y-forge.vercel.app               |
+| New or extended      | ⚠️     | Pre-existing project — must document prior vs. new work |
+| Demo video           | ❌     | Need to create                                          |
+| Codex Session ID     | ⚠️     | Need to identify session ID from opencode workflow      |
+| README Codex section | ❌     | Need to add                                             |
+| Repo shared          | ⚠️     | Need to share with judging emails                       |
+| Installation guide   | ✅     | README covers it                                        |
 
 ### Pre-existing vs. New Work (Submission Period: Jul 13–21)
 
 **Existing before submission period:**
+
 - Core scanner engine (src/lib/scanner/*)
 - API routes (scan, prioritize, pr, report, badge, report/pdf)
 - FIX engine (src/lib/fixer/)
@@ -67,6 +72,7 @@ Winners announced: ~Aug 12
 - Initial docs pages
 
 **Added during submission period (after Jul 13):**
+
 - Mobile overflow fix (box-sizing, overflow-x hidden, pre block scroll)
 - Font size bump for readability (32 edits across 10 components)
 - Sticky footer via flex layout
@@ -85,6 +91,7 @@ Winners announced: ~Aug 12
 - Deployed to Vercel
 
 ### Evidence for Judges
+
 - Git commit history shows dates: `git log --after="2026-07-13" --oneline`
 - Deployed site: https://a11y-forge.vercel.app
 - README documents Codex usage
@@ -92,8 +99,11 @@ Winners announced: ~Aug 12
 ## Submission Checklist
 
 - [ ] Create demo video (<3 min, YouTube public)
-- [ ] Add Codex collaboration section to README
-- [ ] Identify Codex Session ID from build thread
+- [x] Add Codex collaboration section to README
+- [ ] Provide Codex Session ID (run `/feedback` in opencode CLI on primary session)
+  - Primary build session: `ses_08f59b3fdffesJCNH5cSEGHqQh` (Sprint 1 — Visual Redesign)
+  - Secondary: `ses_08f598f93ffeJFMZr46h22gJgu` (Sprint 2 — System Robustness)
+  - View all 89 a11y-forge sessions: `opencode session list`
 - [ ] Share repo with `testing@devpost.com` and `build-week-event@openai.com`
 - [ ] Choose Developer Tools track on Devpost
 - [ ] Fill submission form on openai.devpost.com
@@ -128,21 +138,21 @@ Codex handled boilerplate, test generation, and bug diagnosis while we focused o
 
 ## Judging Strategy
 
-| Criterion | How a11y-forge scores |
-|-----------|----------------------|
-| Technological Implementation | Full-stack Next.js app with AST parsing, GitHub API, OpenAI integration, SVG badge generation, HTML/PDF reports. 165 tests. Deployed. |
-| Design | Dark CLI-style UI. Minimal, monochrome + amber accent. Mobile-responsive (just fixed overflow). Complete flow from scan to results. |
-| Potential Impact | Real problem: 96% of homepages have WCAG failures (WebAIM). Free, instant tool lowers barrier for open-source maintainers. |
-| Quality of Idea | Novel: autonomous pipeline (scan→prioritize→fix→PR) in one tool. Static analysis avoids browser dependency. Deterministic fallback when no AI key. |
+| Criterion                    | How a11y-forge scores                                                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Technological Implementation | Full-stack Next.js app with AST parsing, GitHub API, OpenAI integration, SVG badge generation, HTML/PDF reports. 165 tests. Deployed.              |
+| Design                       | Dark CLI-style UI. Minimal, monochrome + amber accent. Mobile-responsive (just fixed overflow). Complete flow from scan to results.                |
+| Potential Impact             | Real problem: 96% of homepages have WCAG failures (WebAIM). Free, instant tool lowers barrier for open-source maintainers.                         |
+| Quality of Idea              | Novel: autonomous pipeline (scan→prioritize→fix→PR) in one tool. Static analysis avoids browser dependency. Deterministic fallback when no AI key. |
 
 ## Timeline
 
-| Date | Action |
-|------|--------|
-| Jul 19 | Record demo video, update README, submit on Devpost |
-| Jul 20 | Verify all tests pass, final deploy, share repo with judges |
-| Jul 21 (5pm PT) | **Submission deadline** |
+| Date            | Action                                                      |
+| --------------- | ----------------------------------------------------------- |
+| Jul 19          | Record demo video, update README, submit on Devpost         |
+| Jul 20          | Verify all tests pass, final deploy, share repo with judges |
+| Jul 21 (5pm PT) | **Submission deadline**                                     |
 
 ---
 
-*Last updated: July 19, 2026*
+_Last updated: July 19, 2026_
