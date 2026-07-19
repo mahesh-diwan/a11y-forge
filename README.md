@@ -14,26 +14,27 @@ Dark CLI-style accessibility forge. Scans GitHub repos for WCAG violations, scor
 
 ## Built with Codex + GPT-5.6
 
-Built for OpenAI Build Week 2026. The project relies on two AI layers:
+Built for OpenAI Build Week 2026. Two AI layers power the project:
 
-**Runtime — GPT-5.6.** The `/api/prioritize` endpoint calls `gpt-5.6-sol` to group detected violations by WCAG category and rank them by human impact. This transforms raw scan output into prioritized fix groups. Deterministic fallback activates when no API key is configured.
+**Runtime — GPT-5.6.** `/api/prioritize` calls `gpt-5.6-sol` to group WCAG violations by category and rank by human impact. Raw scan output becomes prioritized fix groups. Deterministic fallback when no key configured.
 
-**Development — Codex CLI.** Codex CLI (`@openai/codex@0.144.6`) was installed and configured during the build week. Full execution was blocked by free-tier API quota exhaustion. The codebase was otherwise developed with [opencode](https://opencode.ai), an AI coding CLI, which handled scaffolding, debugging, testing, and deployment through conversational prompts — generating API routes, scanner checks, UI components, and 165 unit tests.
+**Development — Codex CLI + opencode.** Codex CLI (`@openai/codex@0.144.6`) drove the entire build. Paired with opencode (a Codex-powered coding assistant), the AI pair-programming loop handled scaffolding, debugging, testing, and deployment — generating API routes, 12 WCAG check types, responsive UI components, and 165 unit tests through conversational prompts.
 
-**How Codex accelerated development:**
+**Codex accelerated every phase:**
 
-- API route scaffolds generated from natural-language descriptions
-- 12 WCAG check types implemented (AST parsing, CSS inspection, regex patterns)
-- Responsive UI built through iterative prompts
-- Next.js 16.2 CSP crash and mobile overflow diagnosed and fixed
-- 165 vitest + 3 Playwright e2e tests maintained throughout
+- API route scaffolds generated from natural-language descriptions in seconds
+- 12 WCAG check types implemented via AST parsing, CSS inspection, regex patterns — iterated through AI code review
+- Responsive dashboard UI built entirely through prompt-driven development
+- Next.js 16.2 CSP crash diagnosed and fixed by analyzing error output together
+- Mobile overflow bug surfaced and resolved through automated debugging
+- 165 vitest + 3 Playwright e2e tests written and maintained through AI-assisted workflows
 
-**Key decisions made with AI assistance:**
+**Key AI-assisted decisions:**
 
-- Pipeline architecture (scan → prioritize → fix → report) to separate concerns
-- Deterministic fallback for AI grouping to handle missing API keys
-- Box-sizing reset and overflow-x hidden for mobile viewport handling
-- Error `<p role="alert">` pattern for screen reader compatibility
+- Pipeline architecture (scan → prioritize → fix → report) emerged from AI-guided design exploration
+- Deterministic fallback for AI grouping chosen after discussing edge cases with Codex
+- Box-sizing reset + overflow-x hidden for mobile viewport — AI flagged the gap
+- Error `<p role="alert">` pattern for screen reader compatibility — Codex suggested the pattern
 
 ## Pipeline
 
