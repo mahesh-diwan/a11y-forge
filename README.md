@@ -2,6 +2,19 @@
 
 Dark CLI-style accessibility scanner. Scans GitHub repos for WCAG violations, prioritizes by human impact, and opens fix PRs automatically.
 
+## Built with Codex
+
+Developed entirely using [opencode](https://opencode.ai) (Codex CLI) during OpenAI Build Week 2026. Key ways Codex accelerated development:
+
+- **API scaffolding**: Generated all 6 API routes (scan, prioritize, pr, report, report/pdf, badge) from natural-language pipeline descriptions.
+- **Scanner engine**: Implemented 12 WCAG check types — AST traversal for HTML/JSX/TSX/Vue/Svelte, CSS property inspection, regex patterns.
+- **UI components**: Built ScanForm, ScoreCard, ViolationCard, Results, Navigation with mobile-responsive layout via conversational prompts.
+- **Bug fixes**: Resolved Next.js 16 CSP crash, loading.tsx skeleton bug, mobile overflow, sticky footer.
+- **Testing**: Generated and maintained 165 vitest unit tests + 3 Playwright e2e tests.
+- **Deployment**: Configured Vercel deploy, environment variables, CSP headers, production build pipeline.
+
+Codex handled boilerplate, test generation, and bug diagnosis. We focused on product decisions, WCAG rule design, and UX.
+
 ## Features
 
 - **WCAG 2.2 AA scan** — 12 check types covering contrast, keyboard, headings, ARIA, forms, links, language, and more. Static analysis via AST parsing, regex patterns, and CSS property inspection.

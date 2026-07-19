@@ -6,7 +6,7 @@ test("invalid repo url shows error banner", async ({ page }) => {
   const input = page.getByLabel("GitHub repository URL");
   await input.fill("not-a-url");
 
-  await page.getByRole("button", { name: /run/i }).click();
+  await page.getByRole("button", { name: /scan/i }).click();
 
   const alert = page.getByRole("alert").first();
   await expect(alert).toBeVisible({ timeout: 10_000 });

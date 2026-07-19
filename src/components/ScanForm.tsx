@@ -150,7 +150,7 @@ export function ScanForm({
         </p>
       )}
       {error && (
-        <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--fail)", marginTop: "8px" }}>
+        <p role="alert" style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--fail)", marginTop: "8px" }}>
           {error}
         </p>
       )}
