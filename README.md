@@ -27,13 +27,13 @@ _Click image to watch demo (1m54s)_
 
 ## Screenshots
 
-|                 Home & Scanner                 |                    Scan Results                     |
-| :--------------------------------------------: | :-------------------------------------------------: |
-| ![Home page](public/screenshots/a11y-home.png) | ![Results](public/screenshots/a11y-results-top.png) |
+|                      Home & Scanner                      |                   Pipeline & How It Works                    |
+| :------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="public/screenshots/a11y-home.png" width="400"> | <img src="public/screenshots/a11y-pipeline.png" width="400"> |
 
-|              Pipeline & How It Works              |               API Documentation               |
-| :-----------------------------------------------: | :-------------------------------------------: |
-| ![Pipeline](public/screenshots/a11y-pipeline.png) | ![API docs](public/screenshots/a11y-docs.png) |
+|                          Scan Results                           |                    API Documentation                     |
+| :-------------------------------------------------------------: | :------------------------------------------------------: |
+| <img src="public/screenshots/a11y-results-top.png" width="400"> | <img src="public/screenshots/a11y-docs.png" width="400"> |
 
 ---
 
