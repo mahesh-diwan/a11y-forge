@@ -22,7 +22,7 @@ export function Tabs<T extends string>({ tabs, active, onChange, renderLabel, ba
           style={{
             padding: "8px 16px",
             fontFamily: "var(--font-mono)",
-            fontSize: "11px",
+            fontSize: "12px",
             background: "transparent",
             border: "none",
             borderBottom: active === t ? "2px solid var(--accent)" : "2px solid transparent",

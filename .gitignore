@@ -6,8 +6,23 @@ node_modules/
 next-env.d.ts
 coverage/
 test-results/
+.vercel
+.env*
+
+# Agent artifacts
 .impeccable/
 .superpowers/
-.claude/
-CLAUDE.md
 docs/superpowers/
+CLAUDE.md
+.claude/
+AGENTS.md
+DESIGN.md
+PRODUCT.md
+SUBMISSION.md
+hackathon-approach.md
+demo-script.md
+voiceover/
+
+# Docs (keep only DEPLOY.md)
+docs/a11y-snapshot-*.md
+docs/images/

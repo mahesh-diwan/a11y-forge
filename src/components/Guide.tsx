@@ -16,20 +16,20 @@ export function Guide() {
       <ol style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "8px", listStyle: "none", margin: 0, padding: 0 }}>
         {STEPS.map((s) => (
           <li key={s.num} style={{ border: "1px solid var(--border)", padding: "16px" }}>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)", margin: "0 0 4px 0" }}>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)", margin: "0 0 4px 0" }}>
               {s.num}
             </p>
             <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", fontWeight: 600, color: "var(--text)", margin: "0 0 8px 0" }}>
               {s.label}
             </p>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
               {s.desc}
             </p>
           </li>
         ))}
       </ol>
 
-      <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", marginTop: "16px" }}>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", marginTop: "16px" }}>
         4-step pipeline. ~2 min per repo.
       </p>
     </section>

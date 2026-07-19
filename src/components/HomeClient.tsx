@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, FormEvent } from "react";
+import { useRef, useEffect, FormEvent } from "react";
 import { useResults } from "@/lib/ResultsContext";
 import { Hero } from "@/components/Hero";
 
 export function HomeClient() {
   const { repoUrl, setRepoUrl, phase, error, result, prs, scan, cancel, demo, setError } = useResults();
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => { if (phase === "done") cancel(); }, [cancel, phase]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();

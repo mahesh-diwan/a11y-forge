@@ -7,7 +7,7 @@ test("submitting repo url triggers scan and shows feedback", async ({ page }) =>
   await expect(input).toBeVisible();
   await input.fill("https://github.com/owner/repo");
 
-  await page.getByRole("button", { name: /run/i }).click();
+  await page.getByRole("button", { name: /scan/i }).click();
 
   await expect(async () => {
     const feedback =

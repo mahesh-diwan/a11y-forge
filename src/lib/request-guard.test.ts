@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { guard, guardAndParse } from "./request-guard";
 
@@ -12,20 +12,20 @@ describe("request-guard", () => {
       method: "POST",
       body: JSON.stringify({ repoUrl: "https://github.com/o/r" }),
     });
-    const g = guard(req);
+    const g = await guard(req);
     expect(g).toBeNull();
     const parsed = await guardAndParse<{ repoUrl: string }>(req);
     expect(parsed.error).toBeNull();
     expect(parsed.data!.repoUrl).toBe("https://github.com/o/r");
   });
 
-  it("blocks oversized content-length", () => {
+  it("blocks oversized content-length", async () => {
     const req = new NextRequest("http://localhost/api/scan", {
       method: "POST",
       headers: { "content-length": String(3_000_000) },
       body: "{}",
     });
-    const g = guard(req);
+    const g = await guard(req);
     expect(g?.status).toBe(413);
   });
 
@@ -40,7 +40,7 @@ describe("request-guard", () => {
     expect(body.error.code).toBe("INVALID_JSON");
   });
 
-  it("rate limits after many requests", () => {
+  it("rate limits after many requests", async () => {
     const req = () =>
       new NextRequest("http://localhost/api/x", {
         method: "POST",
@@ -49,7 +49,7 @@ describe("request-guard", () => {
       });
     let blocked = false;
     for (let i = 0; i < 30; i++) {
-      const g = guard(req());
+      const g = await guard(req());
       if (g && g.status === 429) blocked = true;
     }
     expect(blocked).toBe(true);

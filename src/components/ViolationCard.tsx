@@ -20,7 +20,7 @@ export function ViolationCard({ v }: ViolationCardProps) {
     <div style={{ border: "1px solid var(--border)", padding: "12px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
         <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: dotColor, flexShrink: 0, display: "inline-block" }} role="img" aria-label={`Severity: ${v.type}`} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--accent)" }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--accent)" }}>
           {v.file}:{v.line}
         </span>
       </div>
@@ -33,7 +33,7 @@ export function ViolationCard({ v }: ViolationCardProps) {
           border: "1px solid var(--border)",
           padding: "8px",
           fontFamily: "var(--font-mono)",
-          fontSize: "10px",
+          fontSize: "11px",
           color: "var(--muted)",
           overflow: "auto",
           margin: 0,

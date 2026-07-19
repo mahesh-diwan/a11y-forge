@@ -29,7 +29,8 @@ export default function RootLayout({
         <ResultsProvider>
           <a
             href="#main-content"
-            className="fixed -left-[9999px] top-0 z-[100] bg-[var(--accent)] px-4 py-2 font-mono text-sm text-[#000] opacity-0 focus:left-0 focus:opacity-100"
+            style={{ color: "#000" }}
+            className="fixed -left-[9999px] top-0 z-[100] bg-[var(--accent)] px-4 py-2 font-mono text-sm opacity-0 focus:left-0 focus:opacity-100"
           >
             Skip to content
           </a>

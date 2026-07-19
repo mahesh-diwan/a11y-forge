@@ -41,28 +41,35 @@ export interface WorkflowAdapter {
  * runWorkflow uses this unless a custom adapter is injected.
  */
 export class HttpWorkflowAdapter implements WorkflowAdapter {
-  private async callApi(path: string, body: unknown, signal?: AbortSignal): Promise<any> {
+  private async callApi(path: string, body: unknown, signal?: AbortSignal): Promise<unknown> {
     const res = await fetch(path, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
       signal,
     });
-    if (!res.ok) throw new Error((await res.json()).error || `${path} request failed`);
+    if (!res.ok) {
+      const errBody = await res.json();
+      const msg = typeof errBody.error === "string" ? errBody.error : errBody.error?.message || `${path} request failed`;
+      throw new Error(msg);
+    }
     return res.json();
   }
 
   async scan(repoUrl: string, signal?: AbortSignal): Promise<ScanResult> {
-    return this.callApi("/api/scan", { repoUrl }, signal);
+    const data = await this.callApi("/api/scan", { repoUrl }, signal);
+    return data as ScanResult;
   }
 
   async prioritize(repoUrl: string, violations: ScanResult["violations"], consentToAi?: boolean, signal?: AbortSignal): Promise<FixGroup[]> {
     const data = await this.callApi("/api/prioritize", { repoUrl, violations, consentToAi }, signal);
-    return (data.groups as FixGroup[]) ?? [];
+    const resp = data as { groups?: FixGroup[] };
+    return resp.groups ?? [];
   }
 
   async createPr(repoUrl: string, group: FixGroup, consentToAi?: boolean, signal?: AbortSignal, dryRun?: boolean): Promise<FixPR> {
-    return this.callApi("/api/pr", { repoUrl, group, consentToAi, dryRun }, signal);
+    const data = await this.callApi("/api/pr", { repoUrl, group, consentToAi, dryRun }, signal);
+    return data as FixPR;
   }
 }
 

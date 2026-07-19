@@ -1,25 +1,12 @@
-/**
- * Build security headers including Content-Security-Policy.
- *
- * CSP note: Next.js 16 with Turbopack injects inline <script> chunks and
- * <style> elements for CSS modules at build/runtime. Removing 'unsafe-inline'
- * entirely breaks hot-reload and CSS injection. We mitigate via:
- * - 'strict-dynamic' for scripts (trust propagates from nonced entry)
- * - object-src 'none', base-uri 'self', form-action 'self' (narrow attack surface)
- * - nonce parameter for use with next/script or custom script tags
- *
- * When Turbopack supports nonce propagation, switch both to nonce-based policy.
- */
-export function buildSecurityHeaders(env: string, nonce?: string): Headers {
+export function buildSecurityHeaders(env: string, _nonce?: string): Headers {
   const h = new Headers();
 
-  const scriptNonce = nonce ? `'nonce-${nonce}'` : "'unsafe-inline'";
-  const styleNonce = nonce ? `'nonce-${nonce}'` : "'unsafe-inline'";
+  const evalPolicy = env === "development" ? " 'unsafe-eval'" : "";
 
   const csp = [
     "default-src 'self'",
-    `script-src 'self' ${scriptNonce} 'strict-dynamic'`,
-    `style-src 'self' ${styleNonce}`,
+    `script-src 'self' 'unsafe-inline'${evalPolicy}`,
+    `style-src 'self' 'unsafe-inline'`,
     "img-src 'self' data: https:",
     "connect-src 'self' api.openai.com api.github.com",
     "frame-ancestors 'none'",

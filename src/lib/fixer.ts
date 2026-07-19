@@ -208,18 +208,18 @@ Respond JSON: { "edits": [{ "file": "path/to/file.tsx", "line": 42, "attribute":
 
     for (const e of raw) {
       if (typeof e !== "object" || e === null) continue;
-      const f = String((e as any).file ?? "");
-      const line = Number((e as any).line ?? 0);
-      const attr = String((e as any).attribute ?? "").toLowerCase();
-      const action = String((e as any).action ?? "");
-      const value = String((e as any).value ?? "");
+      const rec = e as Record<string, unknown>;
+      const f = String(rec.file ?? "");
+      const line = Number(rec.line ?? 0);
+      const attr = String(rec.attribute ?? "").toLowerCase();
+      const action = String(rec.action ?? "");
+      const value = String(rec.value ?? "");
 
       if (!filesInGroup.has(f)) continue;
       if (!Number.isInteger(line) || line < 1) continue;
       if (action !== "add" && action !== "replace") continue;
       if (value.length > 500) continue;
 
-      // Derive expected attribute from violation types on this file
       const fileTypes = violationTypesByFile.get(f);
       if (!fileTypes) continue;
       const expectedAttr = [...fileTypes].map((t) => attributeForType(t)).find((a) => a === attr);

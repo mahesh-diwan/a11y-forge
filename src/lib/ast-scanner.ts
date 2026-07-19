@@ -5,7 +5,7 @@ import type { NodePath } from "@babel/traverse";
 import type { CheckRunner } from "./violation-meta";
 
 // @babel/traverse is CJS; handle default interop (Next/Turbopack may unwrap)
-const traverse: typeof _traverse = (typeof _traverse === "function" ? _traverse : (_traverse as any).default) ?? _traverse;
+const traverse: typeof _traverse = (typeof _traverse === "function" ? _traverse : (_traverse as unknown as { default: typeof _traverse }).default) ?? _traverse;
 
 interface JSXNode {
   loc: { start?: { line?: number } } | null;

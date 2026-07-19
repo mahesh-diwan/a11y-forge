@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
-import { scanRepo, CHECKS } from "./scanner";
+import { scanRepo, CHECKS, computeCoverage } from "./scanner";
 import { coalesce } from "./coalesce";
+import type { Violation } from "./types";
 
 function makeOctokit(files: { path: string; content: string }[]) {
   const map = new Map(files.map((f) => [f.path, f.content]));
@@ -116,6 +117,64 @@ describe("scanner regex detectors", () => {
   it("flags html without lang", () => {
     const v = runCheck("missing-html-lang", "<html><body></body></html>", "index.html");
     expect(v.some((x) => x.type === "missing-html-lang")).toBe(true);
+  });
+  it("skips non-html files", () => {
+    expect(runCheck("missing-html-lang", "<html><body></body></html>", "app.tsx")).toHaveLength(0);
+  });
+  it("passes when lang attribute present", () => {
+    expect(runCheck("missing-html-lang", '<html lang="en"><body></body></html>', "index.html")).toHaveLength(0);
+  });
+  it("passes when no html tag", () => {
+    expect(runCheck("missing-html-lang", "<body></body>", "page.html")).toHaveLength(0);
+  });
+  it("handles .html file without lang", () => {
+    expect(runCheck("missing-html-lang", "<html><body></body></html>", "page.html")).toHaveLength(1);
+  });
+  it("skips .htm files", () => {
+    expect(runCheck("missing-html-lang", "<html><body></body></html>", "page.htm")).toHaveLength(0);
+  });
+});
+
+describe("computeCoverage", () => {
+  it("maps categories from violations", () => {
+    const v: Violation[] = [
+      { type: "missing-alt-text", file: "a.html", line: 1, description: "x" },
+      { type: "low-contrast", file: "b.html", line: 2, description: "x" },
+    ];
+    const r = computeCoverage(2, v);
+    expect(r.categories).toEqual(["contrast", "images"]);
+    expect(r.fileCount).toBe(2);
+  });
+  it("identifies scope-limited types", () => {
+    const v: Violation[] = [
+      { type: "low-contrast", file: "a.html", line: 1, description: "x" },
+      { type: "keyboard-trap", file: "b.html", line: 2, description: "x" },
+    ];
+    const r = computeCoverage(2, v);
+    expect(r.scopeLimited).toEqual(["keyboard-trap", "low-contrast"]);
+    expect(r.skipped).toEqual([]);
+  });
+  it("returns empty arrays for no violations", () => {
+    const r = computeCoverage(0, []);
+    expect(r.categories).toEqual([]);
+    expect(r.scopeLimited).toEqual([]);
+    expect(r.skipped).toEqual([]);
+  });
+  it("maps unknown violation types to other", () => {
+    const v: Violation[] = [
+      { type: "unknown-type", file: "a.html", line: 1, description: "x" },
+    ];
+    const r = computeCoverage(1, v);
+    expect(r.categories).toEqual(["other"]);
+  });
+  it("filters SCOPE_LIMITED_TYPES to only those present", () => {
+    const v: Violation[] = [
+      { type: "low-contrast", file: "a.html", line: 1, description: "x" },
+      { type: "missing-alt-text", file: "b.html", line: 2, description: "x" },
+    ];
+    const r = computeCoverage(2, v);
+    expect(r.scopeLimited).toEqual(["low-contrast"]);
+    expect(r.categories).toContain("images");
   });
 });
 

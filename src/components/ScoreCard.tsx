@@ -36,7 +36,7 @@ export function ScoreCard({ score, download }: ScoreCardProps) {
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "28px", fontWeight: 700, margin: 0, color: gradeColor }}>
             {score.score}/100
           </p>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--muted)", margin: "4px 0 0 0" }}>
+          <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)", margin: "4px 0 0 0" }}>
             {score.totalViolations} violations · {score.affectedFiles.length} files
           </p>
         </div>
@@ -45,13 +45,14 @@ export function ScoreCard({ score, download }: ScoreCardProps) {
             <button
               key={k}
               onClick={() => download(k)}
+              aria-label={k === "report" ? "Download HTML report" : k === "badge" ? "Download badge SVG" : "Download PDF report"}
               style={{
                 padding: "6px 12px",
                 background: "transparent",
                 border: "1px solid var(--border)",
                 color: "var(--accent)",
                 fontFamily: "var(--font-mono)",
-                fontSize: "10px",
+                fontSize: "11px",
                 cursor: "pointer",
               }}
             >

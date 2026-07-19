@@ -1,12 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useResults } from "@/lib/ResultsContext";
+
+function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
+  useEffect(() => { const t = setTimeout(onDone, 2500); return () => clearTimeout(t); }, [onDone]);
+  return (
+    <div style={{ position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)", zIndex: 100, background: "var(--surface)", border: "1px solid var(--border)", padding: "8px 16px", fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--muted)" }}>
+      {msg}
+    </div>
+  );
+}
 
 export function Nav() {
   const pathname = usePathname();
   const { result } = useResults();
+  const [toast, setToast] = useState<string | null>(null);
 
   const links = [
     { label: "Home", href: "/" },
@@ -34,7 +45,7 @@ export function Nav() {
           border: "1px solid var(--border)",
           padding: "6px 12px",
           fontFamily: "var(--font-mono)",
-          fontSize: "11px",
+          fontSize: "12px",
         }}
         role="navigation"
         aria-label="Primary"
@@ -76,9 +87,14 @@ export function Nav() {
               <li key={l.label}>
                 {l.disabled ? (
                   <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setToast("Scan a repo first")}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setToast("Scan a repo first"); }}
                     style={{
                       padding: "4px 10px",
                       color: "var(--muted)",
+                      cursor: "pointer",
                     }}
                   >
                     {l.label}
@@ -107,12 +123,13 @@ export function Nav() {
           style={{
             marginLeft: "auto",
             color: "var(--muted)",
-            fontSize: "10px",
+            fontSize: "11px",
           }}
         >
           v0.1.0
         </span>
       </nav>
+      {toast && <Toast msg={toast} onDone={() => setToast(null)} />}
     </header>
   );
 }

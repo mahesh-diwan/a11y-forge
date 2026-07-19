@@ -100,7 +100,7 @@ export function generateReport(input: ReportInput): string {
     <tbody>${rows}</tbody>
   </table>
 
-  <div class="footer">a11y-forge — Built with Codex + GPT-5.6 — OpenAI Build Week 2026</div>
+  <div class="footer">a11y-forge — autonomous WCAG fixer</div>
 </div>
 </body>
 </html>`;

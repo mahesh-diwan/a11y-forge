@@ -28,7 +28,7 @@ export class AppError extends Error {
     this.safeMessage = init.safeMessage;
     this.details = init.details;
     this.errorId = errorId();
-    if (init.cause) (this as any).cause = init.cause;
+    if (init.cause) Object.defineProperty(this, "cause", { value: init.cause, enumerable: false, writable: true });
   }
 }
 
