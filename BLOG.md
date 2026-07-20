@@ -6,7 +6,7 @@
 
 ---
 
-![](https://raw.githubusercontent.com/mahesh-diwan/a11y-forge/main/public/screenshots/a11y-home.png)
+> **📸 Upload:** `public/screenshots/a11y-home.png` — drag this into the editor here (hero screenshot with scan input + how it works)
 
 ---
 
@@ -54,7 +54,7 @@ No configuration. No signup. No credit card. No cost.
 - **SVG badge** — embed your score in any README
 - **Screen reader preview** — experience your site as a blind user would
 
-![](https://raw.githubusercontent.com/mahesh-diwan/a11y-forge/main/public/screenshots/a11y-results-top.png)
+> **📸 Upload:** `public/screenshots/a11y-results-top.png` — drag here (scan results showing score + violations)
 
 ---
 
@@ -62,7 +62,7 @@ No configuration. No signup. No credit card. No cost.
 
 Four stages. Two minutes. One report card.
 
-![](https://raw.githubusercontent.com/mahesh-diwan/a11y-forge/main/public/screenshots/a11y-pipeline-diagram.png)
+> **📸 Upload:** `public/screenshots/a11y-pipeline-cards.png` — drag here (4-step pipeline from the live app: Scan → Group → Fix → PR)
 
 ### Stage 1 — Scan
 
@@ -85,6 +85,8 @@ Then it runs **12 distinct WCAG 2.2 AA check types** against every file, using a
 | Error identification    | 3.3.1 AA       | Forms without error messages                       |
 | Sensory characteristics | 1.3.3 AA       | "Click the green button" — color-only instructions |
 
+> **📸 Upload:** `public/screenshots/a11y-scanner-table.png` — drag here (full scanner reference from docs)
+
 ### Stage 2 — Prioritize
 
 Raw violations are sent to **GPT-5.6-sol**, which:
@@ -102,7 +104,7 @@ For each violation group, a11y-forge generates semantic diffs, creates one Git b
 
 ### Stage 4 — Report
 
-![](https://raw.githubusercontent.com/mahesh-diwan/a11y-forge/main/public/screenshots/a11y-docs.png)
+> **📸 Upload:** `public/screenshots/a11y-docs.png` — drag here (API documentation + curl examples)
 
 Everything you need to act:
 
